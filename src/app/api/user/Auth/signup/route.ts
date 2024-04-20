@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { signupInput } from "@/schemas/signupInput"
 import { PrismaClient } from '@prisma/client';
-
+import { JWT_SECRET } from "../../../../../../config";
 import { sign } from 'jsonwebtoken';
 
 export default async function POST(req:Request){
@@ -33,7 +33,7 @@ export default async function POST(req:Request){
           },
         });
     
-        const jwt = await sign({ id: user.id }, process.env.JWT_SECRET);
+        const jwt = await sign({ id: user.id }, JWT_SECRET);
         return Response.json(
             { 
                 jwt
