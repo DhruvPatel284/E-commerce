@@ -2,7 +2,6 @@
 import { ChangeEvent, useState } from "react";
 import {  useRouter } from 'next/navigation'
 import  axios  from "axios";
-import { BACKEND_URL } from "@/app/config";
 import Link from "next/link";
 
 
@@ -27,9 +26,9 @@ export const Signup = () =>{
                     </div>
                 </div>
                 <div className="pt-2">
-                        <LabelledInput label="Name" placeholder="kunj...." onChange={(e) => {
+                        <LabelledInput label="Name" placeholder="dhruv...." onChange={(e) => {
                         }} />
-                        <LabelledInput label="Username" placeholder="kunj@gmail.com" onChange={(e) => {
+                        <LabelledInput label="Username" placeholder="dhruv@gmail.com" onChange={(e) => {
                         }} />
                         <LabelledInput label="password" type={"password"} placeholder="123456" onChange={(e) => {
                         }} />

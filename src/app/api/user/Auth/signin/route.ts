@@ -4,7 +4,7 @@ import { signinInput } from "@/schemas/signinInput"
 import { sign } from 'jsonwebtoken';
 import { JWT_SECRET } from "../../../../../../config";
 
-export default async function POST(req:Request){
+export  async function POST(req:Request){
     const prisma = new PrismaClient({
             datasources: {
               db: {
@@ -43,12 +43,9 @@ export default async function POST(req:Request){
         const jwt = await sign({
             id: user.id
           },JWT_SECRET);
-        
-        return Response.json(
-            { 
-                jwt
-            }
-          );
+      
+        return Response.json(jwt);
+          
         
       } catch (e) {
         return Response.json(

@@ -2,7 +2,6 @@
 import { ChangeEvent, useState } from "react";
 import {  useRouter } from 'next/navigation'
 import  axios  from "axios";
-import { BACKEND_URL } from "@/app/config";
 import Link from "next/link";
 
 
@@ -56,3 +55,7 @@ function LabelledInput({ label,placeholder,type } : LabelledInputType){
      </div>
 }
 export default Signin;
+
+
+
+

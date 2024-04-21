@@ -9,7 +9,7 @@ const Quote = () => {
                    address my concerns"
                </div>
                <div className="max-w-md text-sm  text-slate-800 mt-3">
-                    CEO | Kunj dave
+                    CEO | Dhruv patel
                </div>
             </div>
         </div>

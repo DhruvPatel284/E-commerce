@@ -4,12 +4,12 @@ import { PrismaClient } from '@prisma/client';
 import { JWT_SECRET } from "../../../../../../config";
 import { sign } from 'jsonwebtoken';
 
-export default async function POST(req:Request){
+export  async function POST(req:Request){
       
      const prisma = new PrismaClient({
         datasources: {
           db: {
-            url: process.env.DATABASE_URL, // Assuming you have this environment variable set
+            url: process.env.DATABASE_URL, 
           },
         },
       });
@@ -36,7 +36,7 @@ export default async function POST(req:Request){
         const jwt = await sign({ id: user.id }, JWT_SECRET);
         return Response.json(
             { 
-                jwt
+                jwt,
             },
             { status: 200 }
         );
