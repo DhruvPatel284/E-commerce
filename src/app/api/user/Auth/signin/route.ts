@@ -16,7 +16,7 @@ export  async function POST(req:Request){
     const body = await req.json();
         const { success } = signinInput.safeParse(body);
         if (!success) {
-          return Response.json(
+          return NextResponse.json(
             { 
                 message: 'Inputs not correct'
             },
@@ -32,7 +32,7 @@ export  async function POST(req:Request){
             },
         })
         if(!user){
-           return Response.json(
+           return NextResponse.json(
             { 
                 message:"Invalid"
             },
@@ -44,11 +44,11 @@ export  async function POST(req:Request){
             id: user.id
           },JWT_SECRET);
       
-        return Response.json(jwt);
+          return NextResponse.json({  id: user.id });
           
         
       } catch (e) {
-        return Response.json(
+        return NextResponse.json(
             { 
                 message:"Invalid"
             },
