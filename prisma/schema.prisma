@@ -13,6 +13,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum OrederStatus{
+  Pending
+  Delivered
+  cancelled
+}
+
 model User{
   id          String      @id @default(uuid())
   username    String?
@@ -21,26 +27,36 @@ model User{
   phoneno     String
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  orders      Order[]
+  address     Address?
+  product     Product[]
 }
 
 model Address{
-  id String  @id @default(uuid())
+  id         String       @id @default(uuid())
   address    String?
   pincode    Int?
   state      String?
   city       String?
   country    String?
-  
+  userId      String      @unique
+  user        User        @relation(fields: [userId], references: [id])
 }
+
 model Product{
-  id                   String    @id @default(uuid())
+  id                   String               @id @default(uuid())
   product_name         String
   product_description  String?
   price                Int
-  quantity             Int
+  stock                Int
   image                String?
-  createdAt            DateTime? @default(now())
-  updatedAt            DateTime  @updatedAt
+  createdAt            DateTime?            @default(now())
+  updatedAt            DateTime             @updatedAt
+  orderItems           OrderItemsSchema[]
+  userId               String               @unique
+  user                 User                 @relation(fields: [userId], references: [id])
+  category             String 
+  Category             Category             @relation(fields: [category], references: [id])
 }
 
 model Category{
@@ -48,16 +64,25 @@ model Category{
   name        String     @unique
   createdAt   DateTime   @default(now())
   updatedAt   DateTime
+  product     Product[]
 } 
 
+model OrderItemsSchema{
+  id          String     @id @default(uuid()) 
+  productId   String 
+  product     Product    @relation(fields: [productId], references: [id])
+  quantity    Int
+  order      Order?      @relation(fields: [orderId], references: [id])
+  orderId    String?
+}
 model Order{
-  id          String   @id @default(uuid())
+  id          String              @id @default(uuid())
   userId      String
-  total       Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  products    Json
-  status      String   @default("Pending")
+  user        User                @relation(fields: [userId], references: [id])
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  status      OrederStatus        @default(Pending)
+  orderItems  OrderItemsSchema[]
 }
 
 
