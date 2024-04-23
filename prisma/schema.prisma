@@ -14,11 +14,51 @@ datasource db {
 }
 
 model User{
-  id       Int   @id @default(autoincrement())
+  id          String      @id @default(uuid())
   username    String?
-  email String?  @unique
-  password String
+  email       String      @unique
+  password    String
+  phoneno     String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Address{
+  id String  @id @default(uuid())
+  address    String?
+  pincode    Int?
+  state      String?
+  city       String?
+  country    String?
   
 }
+model Product{
+  id                   String    @id @default(uuid())
+  product_name         String
+  product_description  String?
+  price                Int
+  quantity             Int
+  image                String?
+  createdAt            DateTime? @default(now())
+  updatedAt            DateTime  @updatedAt
+}
+
+model Category{
+  id          String     @id @default(uuid())
+  name        String     @unique
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime
+} 
+
+model Order{
+  id          String   @id @default(uuid())
+  userId      String
+  total       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  products    Json
+  status      String   @default("Pending")
+}
+
 
 
