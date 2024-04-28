@@ -1,7 +1,7 @@
 import prismadb from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function GET(req: Request) {
   try {
     const product = await prismadb.product.findMany({
       include: {

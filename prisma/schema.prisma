@@ -19,28 +19,28 @@ enum OrederStatus{
   cancelled
 }
 
+
 model User{
   id          String      @id @default(uuid())
   username    String?
   email       String      @unique
   password    String
   phoneno     String?
-  createdAt   DateTime?    @default(now())
-  updatedAt   DateTime ?   @updatedAt 
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   orders      Order[]
   address     Address?
-  product     Product[]
 }
 
 model Address{
-  id         String       @id @default(uuid())
+  id         String      @id @default(uuid())
   address    String?
   pincode    Int?
   state      String?
   city       String?
   country    String?
-  userId      String      @unique
-  user        User        @relation(fields: [userId], references: [id])
+  userId     String      @unique
+  user       User        @relation(fields: [userId], references: [id])
 }
 
 model Product{
@@ -52,9 +52,6 @@ model Product{
   image                String?
   createdAt            DateTime?            @default(now())
   updatedAt            DateTime             @updatedAt
-  orderItems           OrderItemsSchema[]
-  userId               String               @unique
-  user                 User                 @relation(fields: [userId], references: [id])
   category             String 
   Category             Category             @relation(fields: [category], references: [id])
 }
@@ -67,14 +64,6 @@ model Category{
   product     Product[]
 } 
 
-model OrderItemsSchema{
-  id          String     @id @default(uuid()) 
-  productId   String 
-  product     Product    @relation(fields: [productId], references: [id])
-  quantity    Int
-  order      Order?      @relation(fields: [orderId], references: [id])
-  orderId    String?
-}
 model Order{
   id          String              @id @default(uuid())
   userId      String
@@ -82,7 +71,7 @@ model Order{
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt
   status      OrederStatus        @default(Pending)
-  orderItems  OrderItemsSchema[]
+  products    Json
 }
 
 
