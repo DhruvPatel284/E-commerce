@@ -3,15 +3,9 @@ import { PrismaClient } from '@prisma/client';
 import { signinInput } from "@/schemas/signinInput"
 import { sign } from 'jsonwebtoken';
 import { JWT_SECRET } from "../../../../../../config";
-
+import  prisma  from "@/lib/prismadb"
 export  async function POST(req:Request){
-    const prisma = new PrismaClient({
-            datasources: {
-              db: {
-                url: process.env.DATABASE_URL, // Assuming you have this environment variable set
-              },
-            },
-     });
+
 
     const body = await req.json();
         const { success } = signinInput.safeParse(body);
