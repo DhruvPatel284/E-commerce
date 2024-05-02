@@ -1,45 +1,69 @@
 import { NextResponse } from "next/server";
 import { signupInput } from "@/schemas/signupInput"
-import { PrismaClient } from '@prisma/client';
-import { JWT_SECRET } from "../../../../../../config";
-import { sign } from 'jsonwebtoken';
 import prisma from "@/lib/prismadb";
+import jwt from "jsonwebtoken";
+var bcrypt = require("bcryptjs");
 
 export  async function POST(req:Request){
     const body = await req.json();
+    const { email, password, username } = body;
 
     const { success } = signupInput.safeParse(body);
     if (!success) {
-      return Response.json(
-        { 
-            message: 'Inputs not correct'
-        },
-        { status: 400 }
-    );
-    }
-      try {
-        const user = await prisma.user.create({
-          data: {
-            email: body.email,
-            password: body.password,
-            username: body.username,
+        return Response.json(
+          { 
+              message: 'Inputs not correct'
           },
+          { status: 400 }
+      );
+    }
+
+      try {
+        const user = await prisma.user.findUnique({
+          where: { email },
         });
     
-        const jwt = await sign({ id: user.id }, JWT_SECRET);
-        return Response.json(
-            { 
-                jwt,
+        const hashedPassword = await bcrypt.hash(password, 10);
+    
+        if (!user) {
+          const newUser = await prisma.user.create({
+            data: {
+              email,
+              password: hashedPassword,
+              username,
             },
-            { status: 200 }
+          });
+    
+        const token = jwt.sign(
+          { userId: newUser.id, username: newUser.username, email: newUser.email }, 
+          process.env.JWT_SECRET || "",
+          {
+            expiresIn: "1d",
+          }
         );
+
+        const response = new NextResponse(
+          JSON.stringify({
+            message: "Successfully Account Created",
+            id: newUser.id,
+          })
+        );
+  
+        response.headers.set(
+          "Set-Cookie",
+          `token=${token}; HttpOnly; Path=/; Max-Age=${7 * 24 * 60 * 60}`
+        );
+        return response;
+      }else{
+        return new NextResponse("User Already Exists", { status: 403 });
+      }
         
       } catch(e){
         return Response.json(
             { 
-                message:"You are not logged in"
+              message:"Internal Error"
             },
-            { status: 403 }
+            { status: 500  }
         );
       }
 
