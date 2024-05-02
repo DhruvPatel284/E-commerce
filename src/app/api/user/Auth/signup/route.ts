@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import { JWT_SECRET } from "../../../../../../config";
 import { sign } from 'jsonwebtoken';
 import prisma from "@/lib/prismadb";
+
 export  async function POST(req:Request){
     const body = await req.json();
 

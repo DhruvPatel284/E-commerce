@@ -4,12 +4,11 @@ import { signinInput } from "@/schemas/signinInput"
 import { sign } from 'jsonwebtoken';
 import { JWT_SECRET } from "../../../../../../config";
 import  prisma  from "@/lib/prismadb"
+
 export  async function POST(req:Request){
-
-
     const body = await req.json();
-        const { success } = signinInput.safeParse(body);
-        if (!success) {
+    const { success } = signinInput.safeParse(body);
+     if (!success) {
           return NextResponse.json(
             { 
                 message: 'Inputs not correct'

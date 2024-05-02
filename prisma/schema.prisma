@@ -30,6 +30,8 @@ model User{
   updatedAt   DateTime   @updatedAt
   orders      Order[]
   address     Address?
+  carts       Cart?
+  resetToken resetToken?
 }
 
 model Address{
@@ -74,5 +76,21 @@ model Order{
   products    Json
 }
 
+model resetToken {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  token     String
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Cart {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  products  Json
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+}
 
 
