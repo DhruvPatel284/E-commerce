@@ -7,8 +7,8 @@ import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 const Appbar = () => {
   
   return (
-    <header className="min-w-[1000px]">
-      <div className="flex bg-amazonclone text-white h-[70px]">
+    <header className="min-w-[1000px] h-[70px]">
+      <div className="flex bg-black text-white h-[70px]">
         {/* Left */}
         <div className="flex items-center m-4">
           <Link href={"/"}>
@@ -27,7 +27,7 @@ const Appbar = () => {
           <Search />
         </div>
         {/* Right */}
-        <div className="flex items-center m-4">
+        <div className="flex items-center m-4 ">
           <Link href={"/signin"}>
             <div className="pr-4 pl-4">
                 <div className="text-xs xl:text-xl font-bold">Login</div>
@@ -46,3 +46,8 @@ const Appbar = () => {
 };
 
 export default Appbar;
+
+
+
+
+

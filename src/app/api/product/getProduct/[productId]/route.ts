@@ -6,7 +6,7 @@ export async function GET(
     context: { params: { productId: string } }
   ) {
     try {
-      console.log(req.url);
+
       const product = await prisma.product.findUnique({
         where: { id: context.params.productId },
       });
@@ -14,7 +14,7 @@ export async function GET(
       if (product) {
         return NextResponse.json(product);
       } else {
-        return new NextResponse("Product not found", { status: 404 });
+        return new NextResponse("Product not found", { status: 418 });
       }
     } catch (error) {
       console.log(error);

@@ -7,6 +7,8 @@ export async function PUT(
 ) {
   try {
     const body = await req.json();
+    const temp = context.params.updateId;
+    console.log(temp);
     await prisma.user.update({
       where: { id: context.params.updateId },
       data: body,

@@ -19,6 +19,7 @@ export async function POST(req: Request) {
       return new NextResponse("Order not found", { status: 200 });
     }
   } catch (error) {
-    return new NextResponse("Internal Error", { status: 500 });
+    console.log(error)
+    return new NextResponse("Internal bhul", { status: 403 });
   }
 }

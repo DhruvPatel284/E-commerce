@@ -1,23 +1,29 @@
-import prisma from "@/lib/prismadb";
-import { NextResponse } from "next/server";
+import prismadb from "@/lib/prismadb";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(
-  req: Request,
-  context: { params: { orderId: string } }
+export async function GET(
+  req: NextRequest,
+  context: { params: { orderid: string } }
 ) {
   try {
-    const order = await prisma.order.findFirst({
+    let temp = req.nextUrl.searchParams.get("orderid");
+    if(!temp)return new NextResponse("som went eornh");
+
+    const order = await prismadb.order.findFirst({
       where: {
-        id: context.params.orderId,
+        id:temp ,
       },
     });
-
+    console.log(order);
     if (order) {
-      return NextResponse.json(order);
+      return NextResponse.json({
+        order
+      });
     } else {
       return new NextResponse("Order not found", { status: 200 });
     }
   } catch (error) {
+    console.log(error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
