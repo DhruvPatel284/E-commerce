@@ -2,10 +2,11 @@
 import Appbar from "./Appbar";
 import Link from "next/link";
 import ProductDetails from "./ProductDetails";
-//import { Button } from "./ui/button";
+import { Button } from "./ui/Button";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Skeleton } from "./ui/skeleton";
 
 // import { GB_CURRENCY } from "../utils/constants";
 // import { callAPI } from "../utils/CallApi";
@@ -52,15 +53,15 @@ export const ProductFinalCard = () => {
         <Appbar/>
         <div>
             {
-              product && (<div className="bg-slate-200 mt-7">
+              !loading && product && (<div className="bg-slate-200 mt-7 ">
                     <div className="min-w-[1000px] max-w-[1500px]  p-4">
                     <div className="grid grid-cols-10 gap-2 border-2">
                         {/* Left */}
-                        <div className="col-span-2 p-8 rounded bg-white m-auto">
-                            <img className="max-h-[300px]" src={product.image} alt="Main product" />
+                        <div className=" p-8 col-span-8 rounded bg-white  md:col-span-2">
+                            <img className="max-h-[350px]" src={product.image} alt="Main product" />
                         </div>
                         {/* Middle */}
-                        <div className="col-span-6 p-4 rounded bg-white divide-y divide-gray-400">
+                        <div className="col-span-4 p-4 pl-8 rounded bg-white divide-y divide-gray-400 md:col-span-6">
                         <div className="mb-3">
                             <ProductDetails product_name={product.product_name} product_category={""}/>
                         </div>
@@ -69,7 +70,7 @@ export const ProductFinalCard = () => {
                         </div>
                         </div>
                         {/* Right */}
-                        <div className="col-span-2 p-4 rounded bg-white">
+                        <div className="col-span-8 p-4 pl-8 rounded bg-white md:col-span-2">
                             <div className="text-xl xl:text-2xl text-red-700  font-semibold">
                                 Rs.{product.price}
                             </div>
@@ -94,7 +95,7 @@ export const ProductFinalCard = () => {
                                 <button className="bg-black hover:bg-slate-700 text-white font-bold py-2 px-4 border border-black w-[50%] rounded-md mt-3">
                                     Buy Now
                                 </button>
-                                <button className="bg-yellow-500 w-[50%] hover:bg-yellow-700 text-white font-bold py-2 px-4 border border-black-500 rounded-md mt-3">
+                                <button className="bg-yellow-500 w-[50%] h-10 hover:bg-yellow-700 text-white font-bold py-2 px-4 border border-black-500 rounded-md mt-3">
                                     Add to Cart
                                 </button>
                             </Link>
@@ -104,22 +105,22 @@ export const ProductFinalCard = () => {
             </div>
             )}
     
-           { false && (<div>
+           { loading && (<div>
 
                 <div className="bg-slate-200 mt-7">
-                <div className="min-w-[1000px] max-w-[1500px]  p-4">
+                <div className="min-w-[1000px] max-w-[1500px] h-[450px] p-4">
                     <div className="grid grid-cols-10 gap-2 border-2">
                         {/* Left */}
-                        <div className="col-span-2 p-8 rounded bg-white m-auto">
-                         
-                        </div>
-                        <div className="col-span-6 p-4 rounded bg-white divide-y divide-gray-400">
-                        
-                        </div>
-                        {/* Right */}
-                        <div className="col-span-2 p-4 rounded bg-white">
                       
-                          </div>
+                            <Skeleton className="col-span-2 w-[200px] p-8 rounded  m-auto h-[400px]"/>
+                        
+                      
+                             <Skeleton className="col-span-6 p-4 h-[400px] rounded  divide-y "/>
+                      
+                        {/* Right */}
+                     
+                            <Skeleton className="col-span-2 p-4 h-[400px] rounded"/>
+                        
     
                         </div>
                     </div>

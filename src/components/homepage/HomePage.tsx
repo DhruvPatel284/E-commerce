@@ -1,8 +1,7 @@
 "use client";
-import { CardComponent} from "./CardComponent";
+
 import HomepageProductCard from "./HomepageProductCard";
 import HomePageLamp from "./HomePageLamp";
-import HomepageImage from "./HomepageImage";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import CategorywiseProducts from "./CategorywiseProducts"

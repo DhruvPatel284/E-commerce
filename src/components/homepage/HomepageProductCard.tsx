@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import { string } from "zod";
 export const HomepageProductCard  = ( { id, image , product_name ,price } :  {
