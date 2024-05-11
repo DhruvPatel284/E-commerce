@@ -1,9 +1,10 @@
 "use client"
-
 import Quote from "@/components/auth/Quote";
 import Signup from "@/components/auth/Signup";
+import { useState,useEffect } from "react";
 
 const signup = () => {
+
   return (
     <div>
         <div className="grid grid-cols-1 lg:grid-cols-2">

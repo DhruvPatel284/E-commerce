@@ -16,7 +16,7 @@ export async function PUT(
     return new NextResponse(
       JSON.stringify({
         message: "Successfully Updated",
-      })
+      })  
     );
   } catch (error) {
     console.log(error);

@@ -7,15 +7,9 @@ var bcrypt = require("bcryptjs");
 export  async function POST(req:Request){
     const body = await req.json();
     const { email, password, username } = body;
-
-    const { success } = signupInput.safeParse(body);
-    if (!success) {
-        return Response.json(
-          { 
-              message: 'Inputs not correct'
-          },
-          { status: 400 }
-      );
+    console.log(email)
+    if (!email) {
+      return new NextResponse("Email is required", { status: 400 });
     }
 
       try {
@@ -28,9 +22,9 @@ export  async function POST(req:Request){
         if (!user) {
           const newUser = await prisma.user.create({
             data: {
+              username,
               email,
               password: hashedPassword,
-              username,
             },
           });
     
@@ -46,7 +40,7 @@ export  async function POST(req:Request){
           JSON.stringify({
             message: "Successfully Account Created",
             id: newUser.id,
-          })
+          }),{status:200}
         );
   
         response.headers.set(
@@ -59,6 +53,7 @@ export  async function POST(req:Request){
       }
         
       } catch(e){
+        console.log(e);
         return Response.json(
             { 
               message:"Internal Error"
@@ -68,3 +63,5 @@ export  async function POST(req:Request){
       }
 
 }
+
+

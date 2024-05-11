@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     console.log(req.url);
     const category = await prisma.category.findMany({
       include: {
-        product: true,
+        products: true,
       },
     });
     return NextResponse.json(category);

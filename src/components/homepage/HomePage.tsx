@@ -33,16 +33,17 @@ const HomePage = () => {
       getCategoryData();
     }, []);
 
-    // useEffect(() => {
-    //   console.log(data); // This will log the updated state after it's been set
-    // }, [data]);
+    useEffect(() => {
+      console.log(data); // This will log the updated state after it's been set
+    }, [data]);
     
    
 
   return (
-    <div>
+    <div className="bg-slate-100">
+      <HomePageLamp children="Ship Shop Shou"/>
       {data &&
-        data.map((category: { id: string; name: string; products?: Product[] }) => {
+        data.map((category: { id: string; name: string; products: Product[] }) => {
              return(
               <CategorywiseProducts key={category.id} title ={category.name} products={category.products} />
              );

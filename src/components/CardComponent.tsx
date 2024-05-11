@@ -2,7 +2,7 @@
 import React, { useRef } from "react";
 import { useScroll, useTransform, motion, MotionValue } from "framer-motion";
 import Appbar from "./Appbar";
-import HomepageProductCard from "./HomepageProductCard.tsx";
+import HomepageProductCard from "./homepage/HomepageProductCard";
 
 
 
