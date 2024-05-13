@@ -14,7 +14,7 @@ const Search = () => {
       e.preventDefault();
       if (searchTerm) {
           const params = new URLSearchParams({ searchTerm: searchTerm });
-          navigate.push(`/productSuggestion?${params.toString()}`);
+          navigate.push(`/product?${params.toString()}`);
       } else {
          alert("please enter valid search")
       }

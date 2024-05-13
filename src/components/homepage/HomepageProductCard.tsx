@@ -1,6 +1,7 @@
+
 import Link from "next/link";
 import { string } from "zod";
-export const HomepageProductCard  = ( { id, image , product_name ,price } :  {
+export const HomepageProductCard  = ( { id , image , product_name ,price } :  {
   id:string;
   image:string;
   product_name : string;
@@ -8,10 +9,10 @@ export const HomepageProductCard  = ( { id, image , product_name ,price } :  {
 }   )  => {
   console.log(id)
   return (
-    <div className="m-2">
+    <div className="m-2 ">
         <div className="group my-10 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border-2 border-gray-300 bg-white shadow-lg">
           <div className="relative mx-3 mt-3 h-60 overflow-hidden rounded-xl" >
-            <div className="flex justify-center ">
+            <div className="flex justify-center hover:scale-110 transition-all">
               <img  className="h-[250px] flex justify-center" src={image} alt="product image" />
             </div>
                  <div className="absolute  bottom-0 mb-4 flex space-x-4 w-full justify-center">           
@@ -19,7 +20,7 @@ export const HomepageProductCard  = ( { id, image , product_name ,price } :  {
           </div>
           <div className="mt-4 px-5 pb-5">
             <a href="#">
-              <h5 className="text-xl tracking-tight text-slate-900">{product_name}</h5>
+              <h5 className="text-xl tracking-tight text-slate-900 max-h-[30px] overflow-hidden">{product_name}</h5>
             </a>
             <div className="mt-2 mb-5 flex items-center justify-between">
               <p>
