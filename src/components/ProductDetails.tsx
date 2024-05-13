@@ -7,7 +7,7 @@ interface ProductDetailsProps{
   product_category: string;
 }
 
-const ProductDetails = ( {product_name , product_category , }) => {
+const ProductDetails = ( {product_name , product_category , }:{product_name:string,product_category:string}) => {
   return (
     <div className="mb-1">
       <div className="text-xl xl:text-2xl font-medium mb-1">

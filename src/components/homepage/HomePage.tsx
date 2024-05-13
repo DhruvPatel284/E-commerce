@@ -12,7 +12,14 @@ export interface Product {
   image: string;
   product_name: string;
   price: number;
-  category: String;
+  Category: Category;
+}
+interface Category {
+  id: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+  products: Product[];
 }
 
 
