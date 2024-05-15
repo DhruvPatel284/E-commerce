@@ -1,14 +1,17 @@
 import prisma from "@/lib/prismadb";
-import { NextResponse } from "next/server";
+import { NextResponse,NextRequest } from "next/server";
 
 export async function POST(
-  req: Request,
+  req: NextRequest,
 ) {
-    const body = await req.json();
+  const userId = req.nextUrl.searchParams.get("userId");
+  if (userId === null) {
+    return new NextResponse("CartId parameter is missing", { status: 400 });
+  }
   try {
     const cart = await prisma.cart.findFirst({
       where: {
-        userId: body.userId,
+        userId: userId,
       },
     });
 
