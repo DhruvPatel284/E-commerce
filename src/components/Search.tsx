@@ -25,7 +25,7 @@ const Search = () => {
             const response = await axios.get<Product[]>('/api/product/getProduct');
             const names = response.data.map(product => product.product_name);
             SetSuggestions(names);
-            console.log('Product Names:', names);
+            // console.log('Product Names:', names);
           } catch (error) {
             console.error('Error fetching product data:', error);
           }

@@ -7,7 +7,7 @@ export const HomepageProductCard  = ( { id , image , product_name ,price } :  {
   product_name : string;
   price:number;
 }   )  => {
-  console.log(id)
+  // console.log(id)
   return (
     <div className="m-2 ">
         <div className="group my-10 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border-2 border-gray-300 bg-white shadow-lg">

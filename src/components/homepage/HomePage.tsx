@@ -39,9 +39,9 @@ const HomePage = () => {
       getCategoryData();
     }, []);
 
-    useEffect(() => {
-      console.log(data); // This will log the updated state after it's been set
-    }, [data]);
+    // useEffect(() => {
+    //   console.log(data); // This will log the updated state after it's been set
+    // }, [data]);
     
    
 
