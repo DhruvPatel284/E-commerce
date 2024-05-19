@@ -26,11 +26,12 @@ interface Product {
 
   const isAuthenticated = async () => {
     try {
-      const response = await axios.post("/api/check");
+      const response = await axios.get("/api/user/auth/getUser");
+      console.log(response.status);
       return response.status;
     } catch (error) {
       console.error("Error checking authentication:", error);
-      return false;
+      return ;
     }
   };
 export const ProductFinalCard = () => {
@@ -60,23 +61,16 @@ export const ProductFinalCard = () => {
     },[loading , params.productId]);
    
     const handleAddToCart = async () => {
-        try {
-            const authenticated = await isAuthenticated();
-            if (authenticated===200) {
-                // User is authenticated, proceed to checkout or add to cart
-                // You can add your logic here
-                console.log("User is authenticated");
-            } else {
-                // User is not authenticated, display alert message or redirect to sign-in page
-                alert("Please sign in first to add items to your cart.");
-                // Alternatively, you can redirect the user to the sign-in page
-                // router.push('/signin');
-            }
-        } catch (error) {
-            console.error("Error checking authentication:", error);
-            // Handle error, maybe display a generic error message
-            alert("An error occurred while checking authentication. Please try again later.");
-        }
+         const status = await isAuthenticated();
+         if(status !== 200){
+            
+                alert("it seems like you not register or signed in");  
+        
+             return ;
+         }
+         if(status === 200){
+            window.location.href = "/checkout";
+         }
     };
 
    
