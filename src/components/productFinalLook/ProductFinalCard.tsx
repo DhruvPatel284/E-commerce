@@ -1,12 +1,12 @@
 "use client"
-import Appbar from "./Appbar";
+import Appbar from "../Appbar";
 import Link from "next/link";
 import ProductDetails from "./ProductDetails";
-import { Button } from "./ui/Button";
+import { Button } from "../ui/Button";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "../ui/skeleton";
 import { getCookie, setCookie } from 'cookies-next'
 
 

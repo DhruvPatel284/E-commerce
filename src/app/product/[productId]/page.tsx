@@ -1,5 +1,5 @@
 import Appbar from "@/components/Appbar";
-import ProductFinalCard from "@/components/ProductFinalCard";
+import ProductFinalCard from "@/components/productFinalLook/ProductFinalCard";
 
 export const productId = () => {
   return <div>
