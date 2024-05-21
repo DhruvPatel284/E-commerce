@@ -5,10 +5,12 @@ import ProductDetails from "./ProductDetails";
 import { Button } from "../ui/Button";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Skeleton } from "../ui/skeleton";
 import { getCookie, setCookie } from 'cookies-next'
-
+import { useDispatch, useSelector } from "react-redux";
+import { setCartData, setOrderData, setUserData } from "@/redux/actions";
+import axios from "axios";
+import { Cart, CartProduct, InitialState, Order } from "@/redux/types";
 
 // import { GB_CURRENCY } from "../utils/constants";
 // import { callAPI } from "../utils/CallApi";
@@ -27,8 +29,7 @@ interface Product {
   const isAuthenticated = async () => {
     try {
       const response = await axios.get("/api/user/auth/getUser");
-      console.log(response.status);
-      return response.status;
+      return response;
     } catch (error) {
       console.error("Error checking authentication:", error);
       return ;
@@ -36,6 +37,9 @@ interface Product {
   };
 export const ProductFinalCard = () => {
     const params = useParams();
+    const dispatch = useDispatch();
+    const cartData = useSelector((state: InitialState) => state.cart);
+    const userData = useSelector((state: InitialState) => state.userData);
     const [product , setProduct] = useState< Product | null >(null);
     const [loading , setloading] = useState(true);
     
@@ -60,18 +64,68 @@ export const ProductFinalCard = () => {
         }
     },[loading , params.productId]);
    
-    const handleAddToCart = async () => {
-         const status = await isAuthenticated();
-         if(status !== 200){
-            
-                alert("it seems like you not register or signed in");  
+    // const handleAddToCart = async () => {
+    //      const responseData = await isAuthenticated();
+    //      const status = responseData?.status;
         
-             return ;
-         }
-         if(status === 200){
-            window.location.href = "/checkout";
-         }
+    //      if(!responseData&&status !== 200){
+    //          alert("it seems like you not register or signed in");  
+    //          return ;
+    //      }
+    //      if(status === 200){
+    //         dispatch(
+    //             setUserData({
+    //               username: responseData?.data.user.username,
+    //               email: responseData?.data.user.email,
+    //               id: responseData.data.user.userId,
+    //             })
+    //           );
+    //           console.log("user id : ",userData.id);
+    //         await createCartInDatabase(product);
+    //        // window.location.href = "/checkout";
+    //      }
+    // };
+
+    const handleAddToCart = async () => {
+        const response = await isAuthenticated();
+        if (!response || response.status !== 200) {
+            alert("It seems like you are not registered or signed in.");
+            return;
+        }
+
+        const ruserData = response.data.user;
+        dispatch(setUserData({
+            username: ruserData.username,
+            email: ruserData.email,
+            id: ruserData.userId,
+        }));
+        
     };
+
+    useEffect(() => {
+        if (userData.id) {
+          createCartInDatabase(product);
+        }
+      }, [userData.id]);
+    
+      const createCartInDatabase = async (sendData: any) => {
+        try {
+          console.log("user id: ", userData.id);
+          const { data } = await axios.post("/api/cart/create", {
+            products: [sendData],
+            userId: userData.id,
+          });
+          dispatch(setCartData({
+            products: [...cartData.products, sendData],
+            id: data.id,
+          }));
+          window.location.href = "/checkout";
+        } catch (error) {
+          console.log(error);
+          alert("Something went wrong while creating the cart");
+        }
+      };
+    
 
    
     return (

@@ -1,7 +1,7 @@
 import { Action, InitialState } from "./types";
 
 let initialState: InitialState = {
-  userData: { name: "", email: "", id: "" },
+  userData: { username: "", email: "", id: "" },
   cart: { products: [], id: "" },
   order: {
     total: 0,

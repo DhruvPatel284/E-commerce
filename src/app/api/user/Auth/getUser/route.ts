@@ -17,7 +17,7 @@ export async function GET(req: Request) {
       }),
       {status:200}
     );
-    console.log(data);
+    // console.log(data);
     return response;
   } catch (error) {
     console.log(error);

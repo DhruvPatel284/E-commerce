@@ -14,7 +14,7 @@ export interface Product {
   price: number;
   Category: Category;
 }
-interface Category {
+export interface Category {
   id: string;
   name: string;
   createdAt: Date;
