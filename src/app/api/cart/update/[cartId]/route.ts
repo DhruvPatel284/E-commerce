@@ -3,7 +3,6 @@ import { NextResponse ,NextRequest} from "next/server";
 
 export async function POST(
   req: NextRequest,
- context: { params: { cartId: string } }
 ) {
   const cartId = req.nextUrl.searchParams.get("cartId");
   if (cartId === null) {

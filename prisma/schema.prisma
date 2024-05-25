@@ -51,6 +51,7 @@ model Product{
   product_description  String?
   price                Int
   stock                Int
+  quantity             Int?                 @default(0)
   image                String?
   createdAt            DateTime?            @default(now())
   updatedAt            DateTime             @updatedAt

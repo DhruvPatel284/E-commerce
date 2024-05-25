@@ -23,6 +23,7 @@ export interface Category {
 }
 
 
+
 const HomePage = () => {
 
      const[data,setData] = useState([]);

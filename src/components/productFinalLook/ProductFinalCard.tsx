@@ -12,10 +12,6 @@ import { setCartData, setOrderData, setUserData } from "@/redux/actions";
 import axios from "axios";
 import { Cart, CartProduct, InitialState, Order } from "@/redux/types";
 
-// import { GB_CURRENCY } from "../utils/constants";
-// import { callAPI } from "../utils/CallApi";
-// import { addToCart } from "../redux/cartSlice";
-
 interface Product {
     product_name: string;
     product_description: string;
@@ -63,54 +59,53 @@ export const ProductFinalCard = () => {
             ProductData();
         }
     },[loading , params.productId]);
-   
-    // const handleAddToCart = async () => {
-    //      const responseData = await isAuthenticated();
-    //      const status = responseData?.status;
-        
-    //      if(!responseData&&status !== 200){
-    //          alert("it seems like you not register or signed in");  
-    //          return ;
-    //      }
-    //      if(status === 200){
-    //         dispatch(
-    //             setUserData({
-    //               username: responseData?.data.user.username,
-    //               email: responseData?.data.user.email,
-    //               id: responseData.data.user.userId,
-    //             })
-    //           );
-    //           console.log("user id : ",userData.id);
-    //         await createCartInDatabase(product);
-    //        // window.location.href = "/checkout";
-    //      }
-    // };
 
+
+    // useEffect(() => {
+    //   const getCartDataFromDB = async () => {
+    //     const resp = await axios.post(`/api/cart/get/[userId]]/?userId=${userData.id}`);
+        
+    //     if (resp.data !== "Cart not found") {
+    //       dispatch(setCartData(resp.data));
+    //       console.log("cart data :",cartData);
+    //     }
+        
+    //   };
+    //   userData.id && getCartDataFromDB();
+    // }, [userData.id]);
+   
     const handleAddToCart = async () => {
         const response = await isAuthenticated();
         if (!response || response.status !== 200) {
             alert("It seems like you are not registered or signed in.");
             return;
         }
-
+        console.log(response.data)
         const ruserData = response.data.user;
         dispatch(setUserData({
             username: ruserData.username,
             email: ruserData.email,
             id: ruserData.userId,
         }));
+
+        try {
+          const cartResponse = await axios.post(`/api/cart/get/[userId]/?userId=${ruserData.userId}`);
+          const productWithQuantity = { ...product, quantity: 1 };
+          if (cartResponse.data !== "Cart not found") {
+            // Cart exists, update it
+            updateCartInDatabase(cartResponse.data,productWithQuantity);
+          } else {
+            // No cart found, create a new one
+            createCartInDatabase(product);
+          }
+        } catch (error) {
+          console.log("Error fetching cart data:", error);
+        }
         
     };
-
-    useEffect(() => {
-        if (userData.id) {
-          createCartInDatabase(product);
-        }
-      }, [userData.id]);
     
-      const createCartInDatabase = async (sendData: any) => {
+    const createCartInDatabase = async (sendData: any) => {
         try {
-          console.log("user id: ", userData.id);
           const { data } = await axios.post("/api/cart/create", {
             products: [sendData],
             userId: userData.id,
@@ -126,7 +121,20 @@ export const ProductFinalCard = () => {
         }
       };
     
-
+      const updateCartInDatabase = async (respcartData: Cart, sendData: any) => {
+        try {
+          const cartId = respcartData.id;
+          const updatedCartData = {
+            id: cartId,
+            products: [...respcartData.products, sendData]
+          };
+          await axios.post(`/api/cart/update/[cartId]/?cartId=${cartId}`, updatedCartData);
+          dispatch(setCartData(updatedCartData));
+          window.location.href = "/checkout";
+        } catch (error) {
+          console.log("Error updating cart!");
+        }
+      };
    
     return (
       <div className="bg-slate-200">
