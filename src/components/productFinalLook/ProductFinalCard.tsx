@@ -22,7 +22,7 @@ interface Product {
     quantity: number;
   }
 
-  const isAuthenticated = async () => {
+  export const isAuthenticated = async () => {
     try {
       const response = await axios.get("/api/user/auth/getUser");
       return response;
@@ -131,7 +131,11 @@ export const ProductFinalCard = () => {
           };
           await axios.post(`/api/cart/update/[cartId]/?cartId=${cartId}`, updatedCartData);
           dispatch(setCartData(updatedCartData));
-          window.location.href = "/checkout";
+          setTimeout(()=>{
+            console.log(cartData);
+          },6000)
+         
+          //window.location.href = "/checkout";
         } catch (error) {
           console.log("Error updating cart!");
         }
