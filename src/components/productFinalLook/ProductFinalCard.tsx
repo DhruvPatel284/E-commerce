@@ -82,7 +82,7 @@ export const ProductFinalCard = () => {
         }
         console.log(response.data)
         const ruserData = response.data.user;
-        dispatch(setUserData({
+         dispatch(setUserData({
             username: ruserData.username,
             email: ruserData.email,
             id: ruserData.userId,
@@ -96,7 +96,7 @@ export const ProductFinalCard = () => {
             updateCartInDatabase(cartResponse.data,productWithQuantity);
           } else {
             // No cart found, create a new one
-            createCartInDatabase(product);
+            createCartInDatabase(ruserData.userId,productWithQuantity);
           }
         } catch (error) {
           console.log("Error fetching cart data:", error);
@@ -104,11 +104,12 @@ export const ProductFinalCard = () => {
         
     };
     
-    const createCartInDatabase = async (sendData: any) => {
+    const createCartInDatabase = async (ruserId:string,sendData: any) => {
         try {
+          console.log("user id :",userData.id)
           const { data } = await axios.post("/api/cart/create", {
             products: [sendData],
-            userId: userData.id,
+            userId: ruserId,
           });
           dispatch(setCartData({
             products: [...cartData.products, sendData],
