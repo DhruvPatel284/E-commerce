@@ -12,7 +12,7 @@ import { setCartData, setOrderData, setUserData } from "@/redux/actions";
 import axios from "axios";
 import { Cart, CartProduct, InitialState, Order } from "@/redux/types";
 
-interface Product {
+export interface Product {
     product_name: string;
     product_description: string;
     price: number;
@@ -135,7 +135,7 @@ export const ProductFinalCard = () => {
             console.log(cartData);
           },6000)
          
-          //window.location.href = "/checkout";
+          window.location.href = "/checkout";
         } catch (error) {
           console.log("Error updating cart!");
         }

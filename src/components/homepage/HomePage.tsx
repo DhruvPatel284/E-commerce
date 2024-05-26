@@ -12,7 +12,9 @@ export interface Product {
   image: string;
   product_name: string;
   price: number;
+  product_description:string;
   Category: Category;
+  quantity:number;
 }
 export interface Category {
   id: string;

@@ -1,34 +1,19 @@
-"use client";
-import React,{useEffect} from 'react'
+"use client"
+import Appbar from "@/components/Appbar";
 import { useDispatch, useSelector } from "react-redux";
 import { setCartData, setOrderData, setUserData } from "@/redux/actions";
-import axios from "axios";
-import { Cart, CartProduct, InitialState, Order } from "@/redux/types";
-import { usePathname, useRouter } from "next/navigation";
-import { isAuthenticated } from '@/components/productFinalLook/ProductFinalCard';
+import { Cart, CartProduct, InitialState, Order } from "@/redux/types"
+import CheckOutPage from "@/components/cart/CheckOutPage";
 
-const Checkout = () => {
-  const dispatch = useDispatch();
-  const cartData = useSelector((state: InitialState) => state.cart);
-  const userData = useSelector((state: InitialState) => state.userData);
-  let userResponse;
-  const router = useRouter();
-
-  useEffect( ()=>{
-    const getuserData = async() => {
-     userResponse = await isAuthenticated();
-    }
-  },[])
-
-  
-
-   
-
-
-
+export const page = () => {
+ 
   return (
-    <div>page</div>
+    <div>
+      <Appbar/>
+        <div>
+          <CheckOutPage/>
+        </div>
+    </div>
   )
 }
-
-export default Checkout;
+export default page;
