@@ -14,17 +14,18 @@ export const CheckOutPage =  () => {
 
     // const userData = useSelector((state : InitialState) => state.userData);
     // console.log(userData);
-    
-    const [CartProduct , setCartProduct] = useState< CartProduct[] | null >(null);
+    const dispatch = useDispatch();
+    const [CartProduct , setCartProduct] = useState< CartProduct[] | null>(null);
     const [loading , setLoading ] = useState<boolean>(true);
-    
+    const cartData = useSelector((state : InitialState ) => state.cart)
     useEffect(() => {
         const fetchingCartData = async () => {
             try{
                 const userDetails = await isAuthenticated();
                 const userId = userDetails?.data.user.userId;
                 const CartResponse = await axios.post(`api/cart/get/[userId]/?userId=${userId}`);
-                const insertInState = CartResponse.data.products;
+                dispatch(setCartData(CartResponse.data));
+
                 setCartProduct( CartResponse.data.products );
                 setLoading(false);
             }
@@ -37,25 +38,73 @@ export const CheckOutPage =  () => {
     const deleteHandler = async (id : string) => {
         try{
             console.log(id);
-         
-            // CartResponse.data.products = CartResponse.data.products.filter(product => {
-            //     return product.productId !== id;
-            // });
-            // console.log(CartResponse.data)
             const userDetails = await isAuthenticated();
             const CartResponse = await axios.post(`api/cart/get/[userId]/?userId=${userDetails?.data.user.userId}`);
            
             const FilteredNewCartData= CartResponse.data.products?.filter((product:CartProduct)=> {
                 return product.id !== id;
             });
-            console.log(FilteredNewCartData);
             let newCartVAlue = {
                 id : CartResponse.data.id,
                 products : FilteredNewCartData
             }
             const DeletedResponce = await axios.post(`api/cart/update/[cartId]/?cartId=${CartResponse.data.id}`,newCartVAlue);
             setCartProduct(FilteredNewCartData);
-            console.log(CartProduct);
+        }
+        catch(e){
+
+        }
+    }
+    const incrementHandler = async (id : string)  => {
+
+        try{
+            console.log(id);
+            const userDetails = await isAuthenticated();
+            const CartResponse = await axios.post(`api/cart/get/[userId]/?userId=${userDetails?.data.user.userId}`);
+            const quantityUpdatedData = CartResponse.data.products.map((product : CartProduct ) => {
+                if(product.id === id) {
+                    return {...product,quantity : product.quantity + 1}
+                }else{
+                    return { ...product };
+                }
+            })
+            console.log(quantityUpdatedData);
+            let newCartVAlue = {
+                id : CartResponse.data.id,
+                products : quantityUpdatedData
+            }
+            const DeletedResponce = await axios.post(`api/cart/update/[cartId]/?cartId=${CartResponse.data.id}`,newCartVAlue);
+            setCartProduct(quantityUpdatedData);
+        }
+        catch(e){
+
+        }
+    }
+    const decrementHandler = async ( id : string , quantity : number ) => {
+        try{
+            console.log(id);
+            if( quantity === 1 ){
+                deleteHandler(id);
+            }
+            else{
+                const userDetails = await isAuthenticated();
+                const CartResponse = await axios.post(`api/cart/get/[userId]/?userId=${userDetails?.data.user.userId}`);
+                const quantityUpdatedData = CartResponse.data.products.map((product : CartProduct ) => {
+                    if(product.id === id) {
+                        return {...product, quantity : product.quantity - 1};
+                    }else{
+                        return { ...product };
+                    }
+                })
+                console.log(quantityUpdatedData);
+                let newCartVAlue = {
+                    id : CartResponse.data.id,
+                    products : quantityUpdatedData
+                }
+                const DeletedResponce = await axios.post(`api/cart/update/[cartId]/?cartId=${CartResponse.data.id}`,newCartVAlue);
+                setCartProduct(quantityUpdatedData);
+            }
+            
         }
         catch(e){
 
@@ -73,6 +122,7 @@ export const CheckOutPage =  () => {
                         Shopping Cart
                     </div>
                     {CartProduct && CartProduct.map((product : CartProduct) => {
+                        
                     return (
                         <div className="mt-10" key={product.id}>
                         <div className="grid grid-cols-12">
@@ -113,7 +163,7 @@ export const CheckOutPage =  () => {
                                         <button
                                             className="text-sm xl:text-base font-semibold rounded text-blue-500 mt-2  cursor-pointer"
                                             onClick={() => {
-                                                deleteHandler(product.id);
+                                                deleteHandler(product.id );
                                             }}
                                         >
                                             Delete
@@ -125,21 +175,25 @@ export const CheckOutPage =  () => {
                                 <div className="mt-3">
                                     
                                     <div className="grid grid-cols-3 w-20 text-center">
-                                        <div
+                                        <button
                                             className="text-xl xl:text-2xl bg-gray-400 rounded cursor-pointer"
-                                        
+                                            onClick={ () => {
+                                                decrementHandler(product.id , product.quantity);
+                                            }}
                                         >
                                             -
-                                        </div>
+                                        </button>
                                         <div className="text-lg xl:text-xl bg-gray-200">
                                             {product.quantity}
                                         </div>
-                                        <div
+                                        <button
                                             className="text-xl xl:text-2xl bg-gray-400 rounded cursor-pointer"
-                                        
+                                            onClick={() => {
+                                                incrementHandler(product.id);
+                                            }}
                                         >
                                             +
-                                        </div>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
