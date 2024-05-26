@@ -15,17 +15,16 @@ export const CheckOutPage =  () => {
     // const userData = useSelector((state : InitialState) => state.userData);
     // console.log(userData);
     
-    const [CartProduct , setCartProduct] = useState< Product[]>([]);
+    const [CartProduct , setCartProduct] = useState< CartProduct[] | null >(null);
     const [loading , setLoading ] = useState<boolean>(true);
     
-    let CartResponse:any;
     useEffect(() => {
         const fetchingCartData = async () => {
             try{
                 const userDetails = await isAuthenticated();
                 const userId = userDetails?.data.user.userId;
-                CartResponse = await axios.post(`api/cart/get/[userId]/?userId=${userId}`);
-                console.log(CartResponse?.data.id)
+                const CartResponse = await axios.post(`api/cart/get/[userId]/?userId=${userId}`);
+                const insertInState = CartResponse.data.products;
                 setCartProduct( CartResponse.data.products );
                 setLoading(false);
             }
@@ -36,30 +35,36 @@ export const CheckOutPage =  () => {
         fetchingCartData();
     } ,[])
     const deleteHandler = async (id : string) => {
-
         try{
-          console.log(id);
-            console.log(CartResponse?.data);
-             const temp= CartProduct?.filter((product:Product)=> {
+            console.log(id);
+         
+            // CartResponse.data.products = CartResponse.data.products.filter(product => {
+            //     return product.productId !== id;
+            // });
+            // console.log(CartResponse.data)
+            const userDetails = await isAuthenticated();
+            const CartResponse = await axios.post(`api/cart/get/[userId]/?userId=${userDetails?.data.user.userId}`);
+           
+            const FilteredNewCartData= CartResponse.data.products?.filter((product:CartProduct)=> {
                 return product.id !== id;
             });
-            let updatedCartData = {
-                id : CartResponse?.data.id,
-                products:temp
+            console.log(FilteredNewCartData);
+            let newCartVAlue = {
+                id : CartResponse.data.id,
+                products : FilteredNewCartData
             }
-            console.log(CartResponse?.data)
-            await axios.post(`api/cart/update/[cartId]/?cartId=${updatedCartData.id}`,updatedCartData);
-            setCartProduct(updatedCartData.products);
-            console.log(CartResponse?.data.products);
+            const DeletedResponce = await axios.post(`api/cart/update/[cartId]/?cartId=${CartResponse.data.id}`,newCartVAlue);
+            setCartProduct(FilteredNewCartData);
+            console.log(CartProduct);
         }
         catch(e){
-            console.log(e);
+
         }
     }
  
   return (
     <div className="">
-        { !loading && <div className="  bg-slate-100 ">
+        { !loading && <div className=" bg-amazonclone-background  bg-slate-100 ">
             <div className="min-w-[1000px] max-w-[1500px] ml-[20%]  ">
                 <div className="grid grid-cols-8 gap-10 ">
                 {/* Products */}
@@ -67,7 +72,7 @@ export const CheckOutPage =  () => {
                     <div className="text-2xl xl:text-3xl font-sans font-semibold m-4 flex justify-center">
                         Shopping Cart
                     </div>
-                    {CartProduct && CartProduct.map((product : Product) => {
+                    {CartProduct && CartProduct.map((product : CartProduct) => {
                     return (
                         <div className="mt-10" key={product.id}>
                         <div className="grid grid-cols-12">
@@ -107,9 +112,9 @@ export const CheckOutPage =  () => {
                                     <div>
                                         <button
                                             className="text-sm xl:text-base font-semibold rounded text-blue-500 mt-2  cursor-pointer"
-                                          onClick={()=>{
-                                            deleteHandler(product.id)
-                                          }}
+                                            onClick={() => {
+                                                deleteHandler(product.id);
+                                            }}
                                         >
                                             Delete
                                         </button>
