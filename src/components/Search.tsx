@@ -1,5 +1,5 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
-
+import { isAuthenticated } from "./productFinalLook/ProductFinalCard";
 import axios from "axios";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
@@ -22,6 +22,7 @@ export interface Product {
 const Search = () => {
     const [suggestions , setSuggestions ] = useState<string[]>([]);
     const [ searchTerm , setSearchTerm ] = useState<string>();
+
     const navigate = useRouter();
     //@ts-ignore
     const handleSearch = (e) => {
@@ -48,6 +49,8 @@ const Search = () => {
         };
         fetchData();
       }, []);
+
+
 
   return(
         <div className="w-[900px]">

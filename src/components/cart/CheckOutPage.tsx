@@ -8,7 +8,7 @@ import Link from "next/link";
 import ProductDetails from "../productFinalLook/ProductDetails";
 import { isAuthenticated } from "../productFinalLook/ProductFinalCard";
 import { Skeleton } from "../ui/skeleton";
-
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 
 export const CheckOutPage =  () => {
 
@@ -63,7 +63,7 @@ export const CheckOutPage =  () => {
             const CartResponse = await axios.post(`api/cart/get/[userId]/?userId=${userDetails?.data.user.userId}`);
             const quantityUpdatedData = CartResponse.data.products.map((product : CartProduct ) => {
                 if(product.id === id) {
-                    return {...product,quantity : product.quantity + 1}
+                    return {...product, quantity : product.quantity + 1}
                 }else{
                     return { ...product };
                 }
@@ -118,14 +118,17 @@ export const CheckOutPage =  () => {
                 <div className="grid grid-cols-8 gap-10 ">
                 {/* Products */}
                 <div className="col-span-6 bg-white ">
-                    <div className="text-2xl xl:text-3xl font-sans font-semibold m-4 flex justify-center">
-                        Shopping Cart
+                    <div className="text-2xl xl:text-5xl text-slate-800 font-sans font-bold m-4 flex justify-center hover:scale-110 transition-all">
+                        <ShoppingCartIcon className="h-[50px] text-yellow-600"/>
+                        <div className="">
+                            Cart
+                        </div>
                     </div>
                     {CartProduct && CartProduct.map((product : CartProduct) => {
                         
                     return (
                         <div className="mt-10" key={product.id}>
-                        <div className="grid grid-cols-12">
+                        <div className="grid grid-cols-12 h-[300px]">
                             <div className="col-span-10 grid grid-cols-8 divide-y divide-gray-400">
                             <div className="col-span-4 xl:col-span-2">
                                 <Link href={`/`}>
@@ -153,30 +156,35 @@ export const CheckOutPage =  () => {
                                     </div>
                                 </div>
                                 
-
-                                
-                                
                             </div>
                             </div>
-                            <div className="col-span-3 xl:col-span-2">
+                            <div className="col-span-3 xl:col-span-2 ml-5" >
                                     <div>
                                         <button
-                                            className="text-sm xl:text-base font-semibold rounded text-blue-500 mt-2  cursor-pointer"
+                                            className="text-sm flex xl:text-base font-semibold rounded text-blue-600 mt-2 hover:text-blue-400 cursor-pointer"
                                             onClick={() => {
                                                 deleteHandler(product.id );
                                             }}
                                         >
-                                            Delete
+                                            <div>
+                                                Delete
+                                            </div>
+                                            <div className="mt-1">
+                                                <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                </svg>
+                                            </div>
+                                           
                                         </button>
                                     </div>
-                                <div className="text-lg xl:text-xl mt-1 mr-4 text-red-800 font-semibold">
+                                <div className="text-lg xl:text-xl mt-1 mr-4 text-red-700   font-bold hover:text-red-500 cursor-pointer">
                                     Rs.{product.price}
                                 </div>
                                 <div className="mt-3">
                                     
                                     <div className="grid grid-cols-3 w-20 text-center">
                                         <button
-                                            className="text-xl xl:text-2xl bg-gray-400 rounded cursor-pointer"
+                                            className="text-xl xl:text-2xl bg-gray-400 rounded cursor-pointer hover:bg-gray-500"
                                             onClick={ () => {
                                                 decrementHandler(product.id , product.quantity);
                                             }}
@@ -187,7 +195,7 @@ export const CheckOutPage =  () => {
                                             {product.quantity}
                                         </div>
                                         <button
-                                            className="text-xl xl:text-2xl bg-gray-400 rounded cursor-pointer"
+                                            className="text-xl xl:text-2xl bg-gray-400 hover:bg-gray-500 rounded cursor-pointer"
                                             onClick={() => {
                                                 incrementHandler(product.id);
                                             }}
@@ -222,6 +230,10 @@ export const CheckOutPage =  () => {
                     </div>
                     <button className="btn">Proceed to Checkout</button>
                 </div> */}
+                
+                </div>
+                <div className="h-[60px] bg-slate-100 ">
+                    
                 </div>
             </div>
             </div>
