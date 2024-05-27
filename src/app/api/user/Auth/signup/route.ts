@@ -27,6 +27,17 @@ export  async function POST(req:Request){
               password: hashedPassword,
             },
           });
+
+          await prisma.address.create({
+            data: {
+              address: "",
+              pincode: 0,
+              state: "",
+              city: "",
+              country: "",
+              userId: newUser.id,
+            },
+          });
     
         const token = jwt.sign(
           { userId: newUser.id, username: newUser.username, email: newUser.email }, 
