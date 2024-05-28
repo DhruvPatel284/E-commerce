@@ -38,7 +38,7 @@ export const ProductFinalCard = () => {
     const userData = useSelector((state: InitialState) => state.userData);
     const [product , setProduct] = useState< Product | null >(null);
     const [loading , setloading] = useState(true);
-    
+    const [isInCart, setIsInCart] = useState(false);
     useEffect(() => {
         const ProductData = async () => {
             try{
@@ -60,6 +60,33 @@ export const ProductFinalCard = () => {
         }
     },[loading , params.productId]);
 
+    useEffect(() => {
+      const checkIfProductInCart = async () => {
+          const response = await isAuthenticated();
+          if (response && response.status === 200) {
+              const ruserData = response.data.user;
+              dispatch(setUserData({
+                  username: ruserData.username,
+                  email: ruserData.email,
+                  id: ruserData.userId,
+              }));
+
+              try {
+                  const cartResponse = await axios.post(`/api/cart/get/[userId]/?userId=${ruserData.userId}`);
+                  if (cartResponse.data !== "Cart not found") {
+                      const productInCart = cartResponse.data.products.some((item: any) => item.id === product?.id);
+                      setIsInCart(productInCart);
+                  }
+              } catch (error) {
+                  console.log("Error fetching cart data:", error);
+              }
+          }
+      };
+
+      if (product) {
+          checkIfProductInCart();
+      }
+  }, [product, dispatch]);
 
     // useEffect(() => {
     //   const getCartDataFromDB = async () => {
@@ -189,11 +216,12 @@ export const ProductFinalCard = () => {
                                     Buy Now
                                 </button>
                                 </Link>
-                                <button 
-                                onClick={handleAddToCart}
-                                className="bg-yellow-500 w-[50%] h-10 hover:bg-yellow-700 text-white font-bold py-2 px-4 border border-black-500 rounded-md mt-3">
-                                    Add to Cart
-                                </button>
+                                <button
+                                        onClick={isInCart ? () => window.location.href = "/checkout" : handleAddToCart}
+                                        className={`w-[50%] h-10 font-bold py-2 px-4 border rounded-md mt-3 ${isInCart ? 'bg-blue-500 hover:bg-blue-700' : 'bg-yellow-500 hover:bg-yellow-700'} text-white`}
+                                    >
+                                        {isInCart ? "View In Cart" : "Add to Cart"}
+                                    </button>
                           
                             </div>
                     </div>
