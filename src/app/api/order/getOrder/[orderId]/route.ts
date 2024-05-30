@@ -6,12 +6,14 @@ export async function GET(
   context: { params: { orderid: string } }
 ) {
   try {
-    let temp = req.nextUrl.searchParams.get("orderid");
-    if(!temp)return new NextResponse("som went eornh");
+    const orderId = req.nextUrl.searchParams.get("orderId");
+    if (orderId === null) {
+      return new NextResponse("orderId parameter is missing", { status: 400 });
+    }
 
     const order = await prismadb.order.findFirst({
       where: {
-        id:temp ,
+        id:orderId ,
       },
     });
     console.log(order);

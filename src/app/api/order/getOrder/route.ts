@@ -1,9 +1,12 @@
 import prisma from "@/lib/prismadb";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const { userId } = await req.json();
+    const userId = req.nextUrl.searchParams.get("userId");
+    if (userId === null) {
+      return new NextResponse("userId parameter is missing", { status: 400 });
+    }
     const order = await prisma.order.findMany({
       where: {
         userId,

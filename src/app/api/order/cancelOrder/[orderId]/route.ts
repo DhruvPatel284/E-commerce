@@ -1,14 +1,16 @@
 import prisma from "@/lib/prismadb";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
-  req: Request,
-  context: { params: { orderId: string } }
+  req: NextRequest,
 ) {
   try {
-    const { body } = await req.json();
+    const orderId = req.nextUrl.searchParams.get("orderId");
+    if (orderId === null) {
+      return new NextResponse("orderId parameter is missing", { status: 400 });
+    }
     const order = await prisma.order.delete({
-      where: { id: context.params.orderId },
+      where: { id: orderId },
     });
     
     if (order) {
