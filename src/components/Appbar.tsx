@@ -11,7 +11,7 @@ import { User } from "@/redux/types";
 const Appbar = () => {
   const [isUserExisted, setIsUserExisted] = useState(false);
   const [userData, setUserData] = useState<User>();
-
+   const navigate = useRouter();
   useEffect(() => {
     const getUserData = async () => {
       try {
@@ -34,11 +34,11 @@ const Appbar = () => {
       const userInitial = userData.username?.charAt(0).toUpperCase();
       return (
         <div className="flex items-center space-x-4">
-          <Link href={"/checkout"}>
-            <div className="flex pr-3 pl-3">
+          
+            <button onClick = {()=>{navigate.push("/checkout")}}className="flex pr-3 pl-3">
               <ShoppingCartIcon className="h-[48px]" />
-            </div>
-          </Link>
+            </button>
+        
           <button className="h-10 w-10 flex items-center justify-center bg-gray-700 text-white rounded-full"
           
           >

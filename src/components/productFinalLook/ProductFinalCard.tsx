@@ -3,7 +3,7 @@ import Appbar from "../Appbar";
 import Link from "next/link";
 import ProductDetails from "./ProductDetails";
 import { Button } from "../ui/Button";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Skeleton } from "../ui/skeleton";
 import { getCookie, setCookie } from 'cookies-next'
@@ -39,6 +39,7 @@ export const ProductFinalCard = () => {
     const [product , setProduct] = useState< Product | null >(null);
     const [loading , setloading] = useState(true);
     const [isInCart, setIsInCart] = useState(false);
+    const navigate = useRouter();
     useEffect(() => {
         const ProductData = async () => {
             try{
@@ -88,18 +89,18 @@ export const ProductFinalCard = () => {
       }
   }, [product, dispatch]);
 
-    // useEffect(() => {
-    //   const getCartDataFromDB = async () => {
-    //     const resp = await axios.post(`/api/cart/get/[userId]]/?userId=${userData.id}`);
+    useEffect(() => {
+      const getCartDataFromDB = async () => {
+        const resp = await axios.post(`/api/cart/get/[userId]]/?userId=${userData.id}`);
         
-    //     if (resp.data !== "Cart not found") {
-    //       dispatch(setCartData(resp.data));
-    //       console.log("cart data :",cartData);
-    //     }
+        if (resp.data !== "Cart not found") {
+          dispatch(setCartData(resp.data));
+          console.log("cart data :",cartData);
+        }
         
-    //   };
-    //   userData.id && getCartDataFromDB();
-    // }, [userData.id]);
+      };
+      userData.id && getCartDataFromDB();
+    }, [userData.id]);
    
     const handleAddToCart = async () => {
         const response = await isAuthenticated();
@@ -142,7 +143,8 @@ export const ProductFinalCard = () => {
             products: [...cartData.products, sendData],
             id: data.id,
           }));
-          window.location.href = "/checkout";
+          navigate.push("/checkout")
+          // window.location.href = "/checkout";
         } catch (error) {
           console.log(error);
           alert("Something went wrong while creating the cart");
@@ -161,8 +163,8 @@ export const ProductFinalCard = () => {
           setTimeout(()=>{
             console.log(cartData);
           },6000)
-         
-          window.location.href = "/checkout";
+          navigate.push("/checkout")
+          // window.location.href = "/checkout";
         } catch (error) {
           console.log("Error updating cart!");
         }
