@@ -10,6 +10,7 @@ import { isAuthenticated } from "../productFinalLook/ProductFinalCard";
 import { Button } from "../ui/Button";
 import { Skeleton } from "../ui/skeleton";
 import toast from "react-hot-toast";
+import { UserInfo } from "os";
 
 interface Product {
   product_name: string;
@@ -69,8 +70,10 @@ export const PaymentPage = () => {
         }
         const userId = response.data.user.userId;
         const res = await axios.get(`/api/user/auth/getPersonalInfo/[userId]/?userId=${userId}`);
-
+  
         setUserInfo(res.data.user);
+
+     
         const resp = await axios.post(`/api/product/getProduct/[productId]`,
                 {
                     "productId" : params.productId
@@ -87,13 +90,25 @@ export const PaymentPage = () => {
 
 
   const PaymentOnClickHandler = async () => {
-    product.quantity = ProductQuantity;
-    product.price = product.price*ProductQuantity;
-    const response = await axios.post(`/api/order/addOrder`,{
-      userId:userInfo.id,
-      products:product,
-    })
-     toast.success("product orderd successfully!!")
+    try{
+      if ( !userInfo.phoneno ) {
+        toast.error("please fill all details")
+        route.push("/profile");
+      }
+      else{
+        product.quantity = ProductQuantity;
+        product.price = product.price*ProductQuantity;
+        const response = await axios.post(`/api/order/addOrder`,{
+          userId:userInfo.id,
+          products:product,
+        })
+        toast.success("product orderd successfully!!");
+        route.push("/order")
+      }  
+    }
+    catch(e){
+      toast.error("product order failed!!");
+    }
   }
 
 
