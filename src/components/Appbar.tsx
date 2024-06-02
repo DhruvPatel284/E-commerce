@@ -7,11 +7,22 @@ import Link from "next/link";
 import Search from "./Search";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { User } from "@/redux/types";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+
 
 const Appbar = () => {
   const [isUserExisted, setIsUserExisted] = useState(false);
   const [userData, setUserData] = useState<User>();
-   const navigate = useRouter();
+  const route = useRouter();
   useEffect(() => {
     const getUserData = async () => {
       try {
@@ -21,29 +32,68 @@ const Appbar = () => {
         }
         setIsUserExisted(true);
         setUserData(response.data.user);
-        console.log("userdata:",userData)
       } catch (error) {
         console.error('Error while fetching user', error);
       }
     };
     getUserData();
   }, []);
-
+  const logoutHandler = async () => {
+    try {
+      await axios.get("/api/user/auth/signout");
+      window.location.href = "/";
+    } catch (error: any) {
+    
+    }
+  }
   const renderUserButton = () => {
     if (isUserExisted && userData) {
       const userInitial = userData.username?.charAt(0).toUpperCase();
       return (
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center">
           
-            <button onClick = {()=>{navigate.push("/checkout")}}className="flex pr-3 pl-3">
+          <Link href={"/checkout"}>
+            <div className="flex mr-6">
               <ShoppingCartIcon className="h-[48px]" />
-            </button>
-        
-          <button className="h-10 w-10 flex items-center justify-center bg-gray-700 text-white rounded-full"
-          
-          >
-            {userInitial}
-          </button>
+            </div>
+          </Link>
+            <DropdownMenu >
+              <DropdownMenuTrigger>
+                <Avatar className="cursor-pointer select-none bg-slate-500">
+                 
+                    <AvatarFallback>
+                      {userInitial}
+                    </AvatarFallback>
+                
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="absolute -right-2 bg-white">
+                <DropdownMenuLabel className="text-black bg-white">My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-white" />
+                <DropdownMenuItem
+                  className="cursor-pointer text-black"
+                  onClick={() => {
+                    route.push("/profile");
+                  }
+                  }
+                >
+                  My Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer text-black"
+                
+                >
+                  My Orders
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer text-red-500"
+                  onClick={logoutHandler}
+                >
+                  Log Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+         
         </div>
       );
     } else {
@@ -59,12 +109,12 @@ const Appbar = () => {
 
   return (
     <header className="min-w-[1000px] h-[70px]">
-      <div className="flex bg-black text-white h-[70px]">
+      <div className="flex bg-slate-950 text-white h-[70px]">
         {/* Left */}
         <div className="flex items-center m-4">
           <Link href={"/"}>
             <img
-              className="rounded-md h-[50px] w-[90px] m-2"
+              className=" rounded-md h-[50px] w-[90px] m-2"
               src={"../images/logo-ss.png"}
               alt="Amazon logo"
             />
@@ -78,10 +128,11 @@ const Appbar = () => {
           <Search />
         </div>
         {/* Right */}
-        <div className="flex items-center m-4">
+        <div className="flex items-center m-4">   
           {renderUserButton()}
         </div>
       </div>
+      
     </header>
   );
 };

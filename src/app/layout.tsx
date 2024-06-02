@@ -35,8 +35,10 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "@/redux/provider";
-
+import Appbar from "@/components/Appbar";
+import ClientLayout from "@/components/ClientLayout";
 const montserrat = Montserrat({ subsets: ["latin"] });
+
 
 export const metadata: Metadata = {
   title: "Ecommercely Website - Krish Jotaniya",
@@ -51,12 +53,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={montserrat.className}>
-        <Providers>
-          
-          {children}
-          <Toaster position="bottom-right" />
-          {/* <Footer /> */}
-        </Providers>
+      <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

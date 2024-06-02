@@ -3,7 +3,7 @@ import { ChangeEvent, useState } from "react";
 import {  useRouter } from 'next/navigation'
 import  axios  from "axios";
 import Link from "next/link";
-
+import { toast, Toaster } from "react-hot-toast"; 
 
 export const Signin = () =>{
     const navigate = useRouter();
@@ -17,6 +17,7 @@ export const Signin = () =>{
             const token =  response.data;
             //console.log(response.data);
             navigate.push("/");
+            toast.success("signed in successfully");
         }catch(e){
             alert( " error while signin  ");
         }

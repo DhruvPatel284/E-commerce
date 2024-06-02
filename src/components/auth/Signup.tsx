@@ -6,7 +6,7 @@ import Link from "next/link";
 import { send } from "process";
 import { sendResponse } from "next/dist/server/image-optimizer";
 import { SignupInput } from "@/schemas/signupInput"
-
+import { toast, Toaster } from "react-hot-toast"; 
 
 
 
@@ -25,6 +25,7 @@ export const Signup = () =>{
             const response = await axios.post("http://localhost:3000/api/user/auth/signup",inputs);
             console.log(response);
             navigate.push("/");
+            toast.success("Profile Updated"); 
         }
         catch(e){
             console.log(e);

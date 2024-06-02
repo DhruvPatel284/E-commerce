@@ -36,7 +36,7 @@ const ProductSuggestion = () => {
 
     return (
        <div className='bg-slate-200'>
-          <Appbar/> 
+           
           <div className="min-w-[1000px] max-w-[1100px]  h-full m-auto pt-4 bg-slate">
         {products &&
           products.map((product, key) => {

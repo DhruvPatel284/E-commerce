@@ -172,7 +172,7 @@ export const ProductFinalCard = () => {
    
     return (
       <div className="bg-slate-200">
-        <Appbar/>
+        
         <div>
             {
               !loading && product && (<div className="bg-slate-200 mt-7 ">
