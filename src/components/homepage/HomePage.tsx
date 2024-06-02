@@ -49,6 +49,7 @@ const HomePage = () => {
   return (
     <div className="bg-slate-100">
       <HomePageLamp children="Ship Shop Shou"/>
+      
       {data &&
         data.map((category: { id: string; name: string; products: Product[] }) => {
              return(

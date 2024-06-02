@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     const data = await prisma.order.create({
       data: body,
     });
-    return NextResponse.json(data);
+    return NextResponse.json(data,{status:200});
   } catch (error) {
     console.log(error);
     return new NextResponse("Internal Error", { status: 500 });

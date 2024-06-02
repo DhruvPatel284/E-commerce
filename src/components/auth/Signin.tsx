@@ -19,7 +19,7 @@ export const Signin = () =>{
             navigate.push("/");
             toast.success("signed in successfully");
         }catch(e){
-            alert( " error while signin  ");
+            toast.error("Login Failed");
         }
     }
 

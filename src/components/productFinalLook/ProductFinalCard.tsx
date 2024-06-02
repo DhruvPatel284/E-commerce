@@ -205,21 +205,15 @@ export const ProductFinalCard = () => {
                             <div className="text-base xl:text-lg text-green-700 font-semibold mt-1">
                                 { product.quantity > 0 ? "In Stock" : "Out of Stock"}
                             </div>
-                            <div className="text-base xl:text-lg mt-1">
-                                Quantity:
-                                <select>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                </select>
-                            </div>
-                            <Link href={"/checkout"} className="flex flex-col" >
-                                <button className="bg-black hover:bg-slate-700 text-white font-bold py-2 px-4 border border-black w-[50%] rounded-md mt-3">
+                         
+                           
+                                <button className="bg-black hover:bg-slate-700 text-white font-bold py-2 px-4 border
+                                 border-black w-[50%] rounded-md mt-3" onClick={()=>{navigate.push(`/payment/${product.id}`)}}>
                                     Buy Now
                                 </button>
-                                </Link>
+                               
                                 <button
-                                        onClick={isInCart ? () => window.location.href = "/checkout" : handleAddToCart}
+                                        onClick={isInCart ? () => navigate.push(`/checkout`) : handleAddToCart}
                                         className={`w-[50%] h-10 font-bold py-2 px-4 border rounded-md mt-3 ${isInCart ? 'bg-blue-500 hover:bg-blue-700' : 'bg-yellow-500 hover:bg-yellow-700'} text-white`}
                                     >
                                         {isInCart ? "View In Cart" : "Add to Cart"}

@@ -25,11 +25,11 @@ export const Signup = () =>{
             const response = await axios.post("http://localhost:3000/api/user/auth/signup",inputs);
             console.log(response);
             navigate.push("/");
-            toast.success("Profile Updated"); 
+            toast.success("Account Created SuccessFully");
         }
         catch(e){
             console.log(e);
-            alert("error while signup");
+            toast.error("Signup Failed");
         }
     }
     return <div className="h-screen flex justify-center flex-col">
