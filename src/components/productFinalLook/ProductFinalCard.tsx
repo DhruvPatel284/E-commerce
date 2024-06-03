@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCartData, setOrderData, setUserData } from "@/redux/actions";
 import axios from "axios";
 import { Cart, CartProduct, InitialState, Order } from "@/redux/types";
+import toast from "react-hot-toast";
 
 export interface Product {
     product_name: string;
@@ -62,69 +63,33 @@ export const ProductFinalCard = () => {
     },[loading , params.productId]);
 
     useEffect(() => {
-      const checkIfProductInCart = async () => {
-          const response = await isAuthenticated();
-          if (response && response.status === 200) {
-              const ruserData = response.data.user;
-              dispatch(setUserData({
-                  username: ruserData.username,
-                  email: ruserData.email,
-                  id: ruserData.userId,
-              }));
 
+      const checkIfProductInCart = async () => {
               try {
-                  const cartResponse = await axios.post(`/api/cart/get/[userId]/?userId=${ruserData.userId}`);
-                  if (cartResponse.data !== "Cart not found") {
-                      const productInCart = cartResponse.data.products.some((item: any) => item.id === product?.id);
+                  if (cartData) {
+                      const productInCart = cartData.products.some((item: any) => item.id === product?.id);
                       setIsInCart(productInCart);
                   }
               } catch (error) {
                   console.log("Error fetching cart data:", error);
               }
           }
-      };
-
-      if (product) {
+      
+      if(product) {
           checkIfProductInCart();
       }
   }, [product, dispatch]);
-
-    useEffect(() => {
-      const getCartDataFromDB = async () => {
-        const resp = await axios.post(`/api/cart/get/[userId]]/?userId=${userData.id}`);
-        
-        if (resp.data !== "Cart not found") {
-          dispatch(setCartData(resp.data));
-          console.log("cart data :",cartData);
-        }
-        
-      };
-      userData.id && getCartDataFromDB();
-    }, [userData.id]);
    
     const handleAddToCart = async () => {
-        const response = await isAuthenticated();
-        if (!response || response.status !== 200) {
-            alert("It seems like you are not registered or signed in.");
-            return;
-        }
-        console.log(response.data)
-        const ruserData = response.data.user;
-         dispatch(setUserData({
-            username: ruserData.username,
-            email: ruserData.email,
-            id: ruserData.userId,
-        }));
-
+       
         try {
-          const cartResponse = await axios.post(`/api/cart/get/[userId]/?userId=${ruserData.userId}`);
           const productWithQuantity = { ...product, quantity: 1 };
-          if (cartResponse.data !== "Cart not found") {
+          if (cartData.products) {
             // Cart exists, update it
-            updateCartInDatabase(cartResponse.data,productWithQuantity);
+            updateCartInDatabase(cartData,productWithQuantity);
           } else {
             // No cart found, create a new one
-            createCartInDatabase(ruserData.userId,productWithQuantity);
+            createCartInDatabase(userData.id,productWithQuantity);
           }
         } catch (error) {
           console.log("Error fetching cart data:", error);
@@ -134,13 +99,13 @@ export const ProductFinalCard = () => {
     
     const createCartInDatabase = async (ruserId:string,sendData: any) => {
         try {
-          console.log("user id :",userData.id)
+        
           const { data } = await axios.post("/api/cart/create", {
             products: [sendData],
             userId: ruserId,
           });
           dispatch(setCartData({
-            products: [...cartData.products, sendData],
+            products: [ sendData],
             id: data.id,
           }));
           navigate.push("/checkout")
@@ -160,11 +125,8 @@ export const ProductFinalCard = () => {
           };
           await axios.post(`/api/cart/update/[cartId]/?cartId=${cartId}`, updatedCartData);
           dispatch(setCartData(updatedCartData));
-          setTimeout(()=>{
-            console.log(cartData);
-          },6000)
+          
           navigate.push("/checkout")
-          // window.location.href = "/checkout";
         } catch (error) {
           console.log("Error updating cart!");
         }

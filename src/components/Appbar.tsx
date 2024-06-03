@@ -18,12 +18,18 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { setCartData, setOrderData, setUserData } from "@/redux/actions";
+import { Cart, CartProduct, InitialState, Order, Product } from "@/redux/types"
 
 
 
 const Appbar = () => {
   const [isUserExisted, setIsUserExisted] = useState(false);
-  const [userData, setUserData] = useState<User>();
+  // const [userData, setUserData] = useState<User>();
+  const userData = useSelector((state : InitialState) => state.userData);
+  const cartData = useSelector((state : InitialState ) => state.cart)
+  const dispatch = useDispatch();
   const route = useRouter();
   useEffect(() => {
     const getUserData = async () => {
@@ -33,20 +39,30 @@ const Appbar = () => {
           return;
         }
         setIsUserExisted(true);
-        setUserData(response.data.user);
+        const user = {
+          id:response.data.user.userId,
+          username:response.data.user.username,
+          email:response.data.user.email,
+        }
+        dispatch(setUserData(user));
+
+        const CartResponse = await axios.post(`api/cart/get/[userId]/?userId=${response.data.user.userId}`);
+        dispatch(setCartData(CartResponse.data));
+        
       } catch (error) {
         console.error('Error while fetching user', error);
       }
     };
     getUserData();
-  }, []);
+  }, [userData.id,dispatch]);
   const logoutHandler = async () => {
     try {
       await axios.get("/api/user/auth/signout");
       toast.success("Log Out Successfully");
-    
+      setIsUserExisted(false);
+      route.push("/");
     } catch (error: any) {
-    
+      toast.error("Log Out Failed");
     }
   }
   const renderUserButton = () => {
