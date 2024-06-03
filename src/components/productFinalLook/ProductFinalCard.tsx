@@ -81,19 +81,23 @@ export const ProductFinalCard = () => {
   }, [product, dispatch]);
    
     const handleAddToCart = async () => {
-       
-        try {
-          const productWithQuantity = { ...product, quantity: 1 };
-          if (cartData.products) {
-            // Cart exists, update it
-            updateCartInDatabase(cartData,productWithQuantity);
-          } else {
-            // No cart found, create a new one
-            createCartInDatabase(userData.id,productWithQuantity);
+       if(userData.id){
+          try {
+            const productWithQuantity = { ...product, quantity: 1 };
+            if (cartData.products) {
+              // Cart exists, update it
+              updateCartInDatabase(cartData,productWithQuantity);
+            } else {
+              // No cart found, create a new one
+              createCartInDatabase(userData.id,productWithQuantity);
+            }
+          } catch (error) {
+            console.log("Error fetching cart data:", error);
           }
-        } catch (error) {
-          console.log("Error fetching cart data:", error);
-        }
+       } else {
+        toast.error("it seems like you not signed in");
+       }
+
         
     };
     
@@ -112,7 +116,7 @@ export const ProductFinalCard = () => {
           // window.location.href = "/checkout";
         } catch (error) {
           console.log(error);
-          alert("Something went wrong while creating the cart");
+          toast.error("Something went wrong while creating the cart");
         }
       };
     
@@ -128,9 +132,19 @@ export const ProductFinalCard = () => {
           
           navigate.push("/checkout")
         } catch (error) {
-          console.log("Error updating cart!");
+          console.log(error);
+          toast.error("Something went wrong while updating the cart");
         }
       };
+
+      const paymentPageHandler = async(id:string) => {
+        if(userData.id){
+          navigate.push(`/payment/${id}`)
+        }
+        else{
+          toast.error("it seems like you not signed in");
+        }
+      }
    
     return (
       <div className="bg-slate-200">
@@ -170,7 +184,7 @@ export const ProductFinalCard = () => {
                          
                            
                                 <button className="bg-black hover:bg-slate-700 text-white font-bold py-2 px-4 border
-                                 border-black w-[50%] rounded-md mt-3" onClick={()=>{navigate.push(`/payment/${product.id}`)}}>
+                                 border-black w-[50%] rounded-md mt-3" onClick={()=>{paymentPageHandler(product.id)}}>
                                     Buy Now
                                 </button>
                                

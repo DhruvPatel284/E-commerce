@@ -60,7 +60,15 @@ const Appbar = () => {
       await axios.get("/api/user/auth/signout");
       toast.success("Log Out Successfully");
       setIsUserExisted(false);
-      route.push("/");
+      const userEmptyData = {
+        username: "", email: "", id: "" 
+      }
+      const cartEmptyData = {
+        products: [], id: "" 
+      }
+      dispatch(setUserData(userEmptyData))
+      dispatch(setCartData(cartEmptyData))
+      route.replace("/");
     } catch (error: any) {
       toast.error("Log Out Failed");
     }

@@ -10,6 +10,9 @@ import { isAuthenticated } from "../productFinalLook/ProductFinalCard";
 import { Skeleton } from "../ui/skeleton";
 import toast from "react-hot-toast";
 import { OrderProduct } from "@/redux/types";
+import { useDispatch, useSelector } from "react-redux";
+import { setCartData, setOrderData, setUserData } from "@/redux/actions";
+import { Cart, CartProduct, InitialState, Order, Product } from "@/redux/types"
 
   interface order{
     id:string;
@@ -26,17 +29,16 @@ import { OrderProduct } from "@/redux/types";
 const OrderPage = () => {
     const [ orders , setOrders ] = useState<order[]>([]); 
     const [ loading , setloading ] = useState<boolean>(true);
+    const userData = useSelector((state : InitialState) => state.userData);
     useEffect(() => {
         const FetchProduct = async () => {
           try{
-            const response = await isAuthenticated();
-            if (!response || response.status !== 200) {
-              return;
+            if(userData.id){
+                const userId = userData.id;
+                const res = await axios.post(`/api/order/getOrder/?userId=${userId}`);
+                setOrders(res?.data);
+                setloading(false);
             }
-            const userId = response.data.user.userId;
-            const res = await axios.post(`/api/order/getOrder/?userId=${userId}`);
-            setOrders(res?.data);
-            setloading(false);
           }
           catch(e){
             
