@@ -30,6 +30,7 @@ const OrderPage = () => {
     const [ orders , setOrders ] = useState<order[]>([]); 
     const [ loading , setloading ] = useState<boolean>(true);
     const userData = useSelector((state : InitialState) => state.userData);
+    const route = useRouter(); 
     useEffect(() => {
         const FetchProduct = async () => {
           try{
@@ -59,7 +60,7 @@ const OrderPage = () => {
                 return (
                 <div key={key}>
                     <div className="h-[250px] grid grid-cols-12  mt-[2px]  ">
-                    <div className="col-span-3 p-4 bg-white hover:bg-slate-50 trasition-all">
+                    <div className="col-span-3 p-4 bg-white hover:bg-slate-50 trasition-all " onClick={()=>{route.push(`/order/[orderId]/?${order.id}`)}}>
                         <img
                         className="m-auto max-h-[200px] hover:scale-110 transition-all"
                         src={order.products.image}

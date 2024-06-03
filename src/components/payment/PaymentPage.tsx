@@ -3,7 +3,7 @@
 import axios from "axios";
 import { Activity, ActivityIcon, ActivitySquareIcon } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams,useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { isAuthenticated } from "../productFinalLook/ProductFinalCard";
@@ -11,8 +11,9 @@ import { Button } from "../ui/Button";
 import { Skeleton } from "../ui/skeleton";
 import toast from "react-hot-toast";
 import { UserInfo } from "os";
-import { UseDispatch,useSelector } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { Cart, CartProduct, InitialState, Order } from "@/redux/types"
+import { setOrderData } from "@/redux/actions";
 interface Product {
   product_name: string;
   product_description: string;
@@ -38,7 +39,12 @@ export const PaymentPage = () => {
   const userData = useSelector((state : InitialState) => state.userData);
   const route = useRouter();
   const params = useParams();
-  const [ ProductQuantity , setProductQuantity ] = useState<number>(1);
+  const searchParams = useSearchParams();
+  const temp = searchParams.get('quantity');
+  const quantity = Number(temp)
+  const orderData = useSelector((state : InitialState ) => state.order);
+  const dispatch = useDispatch();
+  const [ ProductQuantity , setProductQuantity ] = useState<number>(quantity);
   const [ loading , setloading ] = useState<boolean>(true);
   const [ product , setProduct ] = useState<Product>({
     product_name: "",
@@ -48,7 +54,8 @@ export const PaymentPage = () => {
     id: "",
     category: "",
     stock : 0,
-    quantity: 0
+    quantity:quantity
+
   });
   const [userInfo, setUserInfo] = useState<User>({
     id : "",
@@ -65,7 +72,7 @@ export const PaymentPage = () => {
   useEffect(() => {
     const FetchProduct = async () => {
       try{
-
+    
         const userId = userData.id;
         const res = await axios.get(`/api/user/auth/getPersonalInfo/[userId]/?userId=${userId}`);
   
@@ -76,6 +83,7 @@ export const PaymentPage = () => {
                 {
                     "productId" : params.productId
                   })
+        
         setProduct(resp.data);
         setloading(false);
       }
@@ -95,11 +103,13 @@ export const PaymentPage = () => {
       }
       else{
         product.quantity = ProductQuantity;
-        product.price = product.price*ProductQuantity;
+        const total = product.price*ProductQuantity;
         const response = await axios.post(`/api/order/addOrder`,{
           userId:userInfo.id,
-          products:product,
+          products:[product],
+          total:total,
         })
+       
         toast.success("product orderd successfully!!");
         route.push("/order")
       }  

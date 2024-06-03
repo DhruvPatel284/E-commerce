@@ -139,7 +139,7 @@ export const ProductFinalCard = () => {
 
       const paymentPageHandler = async(id:string) => {
         if(userData.id){
-          navigate.push(`/payment/${id}`)
+          navigate.push(`/payment/${id}?quantity=${1}`)
         }
         else{
           toast.error("it seems like you not signed in");

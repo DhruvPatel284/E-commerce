@@ -10,7 +10,7 @@ import { isAuthenticated } from "../productFinalLook/ProductFinalCard";
 import { Skeleton } from "../ui/skeleton";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-
+import toast from "react-hot-toast";
 export const CheckOutPage =  () => {
 
     const userData = useSelector((state : InitialState) => state.userData);
@@ -101,6 +101,15 @@ export const CheckOutPage =  () => {
 
         }
     }
+
+    const paymentPageHandler = async(id:string,quantity:number) => {
+        if(userData.id){
+          route.push(`/payment/${id}?quantity=${quantity}`)
+        }
+        else{
+          toast.error("it seems like you not signed in");
+        }
+      }
  
   return (
     <div className="">
@@ -141,9 +150,9 @@ export const CheckOutPage =  () => {
                                         </div>
                                         <div>
                                             <button onClick={() => {
-                                                route.push(`/product/${product.id}`)
+                                                paymentPageHandler(product.id,product.quantity)
                                             }} className="bg-slate-700 w-[150px] h-10 hover:bg-slate-500 text-white font-bold py-2 px-4 border border-black-500 rounded-md mt-3">
-                                                View More
+                                                Buy Now
                                             </button>
                                         </div>
                                     </div>
