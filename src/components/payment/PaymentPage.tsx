@@ -11,7 +11,8 @@ import { Button } from "../ui/Button";
 import { Skeleton } from "../ui/skeleton";
 import toast from "react-hot-toast";
 import { UserInfo } from "os";
-
+import { UseDispatch,useSelector } from "react-redux";
+import { Cart, CartProduct, InitialState, Order } from "@/redux/types"
 interface Product {
   product_name: string;
   product_description: string;
@@ -34,7 +35,7 @@ interface User {
   country?: string;
 }
 export const PaymentPage = () => {
-
+  const userData = useSelector((state : InitialState) => state.userData);
   const route = useRouter();
   const params = useParams();
   const [ ProductQuantity , setProductQuantity ] = useState<number>(1);
@@ -64,11 +65,8 @@ export const PaymentPage = () => {
   useEffect(() => {
     const FetchProduct = async () => {
       try{
-        const response = await isAuthenticated();
-        if (!response || response.status !== 200) {
-          return;
-        }
-        const userId = response.data.user.userId;
+
+        const userId = userData.id;
         const res = await axios.get(`/api/user/auth/getPersonalInfo/[userId]/?userId=${userId}`);
   
         setUserInfo(res.data.user);
