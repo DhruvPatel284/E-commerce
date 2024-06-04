@@ -11,6 +11,7 @@ import { Skeleton } from "../ui/skeleton";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+
 export const CheckOutPage =  () => {
 
     const userData = useSelector((state : InitialState) => state.userData);
@@ -241,6 +242,7 @@ export const CheckOutPage =  () => {
                     
                 </div>
             </div>
+            <button onClick={()=>{route.push("/payment/cart")}}>Buy All</button>
             </div>
             }{
                 

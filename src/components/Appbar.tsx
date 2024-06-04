@@ -1,5 +1,4 @@
-
-"use client"
+"use client";
 import { isAuthenticated } from "./productFinalLook/ProductFinalCard";
 import axios from "axios";
 import { useRouter } from 'next/navigation';
@@ -108,8 +107,8 @@ const Appbar = () => {
                 <DropdownMenuItem
                   className="cursor-pointer text-blue-900 font-semibold"
                   onClick={() => {
-                    route.push("/profile");
-                  }
+                      route.push("/profile");
+                    }
                   }
                 >
                   Personal Info

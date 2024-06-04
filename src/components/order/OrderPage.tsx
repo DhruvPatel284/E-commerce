@@ -32,14 +32,15 @@ const OrderPage = () => {
     const userData = useSelector((state : InitialState) => state.userData);
     const route = useRouter();
     const orderData = useSelector((state : InitialState ) => state.orders); 
+    const dispatch = useDispatch();
     useEffect(() => {
         const FetchProduct = async () => {
           try{
             if(userData.id){
-                //  const userId = userData.id;
-                //  const res = await axios.post(`/api/order/getOrder/?userId=${userId}`);
-                // console.log(orderData)
-                setOrders(orderData);
+                const OrderResponse = await axios.post(`api/order/getOrder/?userId=${userData.id}`);
+                console.log("order response:",OrderResponse?.data)
+                dispatch(setOrderData(OrderResponse?.data));
+                setOrders(OrderResponse?.data);
                 setloading(false);
             }
           }
@@ -48,7 +49,7 @@ const OrderPage = () => {
           }
         }
         FetchProduct();
-      }, [])
+      }, [userData.id])
   return (
     <div>
             <div className='bg-slate-200'>
@@ -63,9 +64,11 @@ const OrderPage = () => {
                     <div key={orderIndex} className="order">
                     {
                         order.products.map((product:OrderProduct,productIndex:number)=>(
-                            <div key={productIndex} className="product">
+                            <div key={productIndex} onClick={() => {
+                                route.push(`/order/[orderId]/${order.id}`);
+                              }} className="product">
                                       <div className="h-[250px] grid grid-cols-12  mt-[2px]  ">
-                                    <div className="col-span-3 p-4 bg-white hover:bg-slate-50 trasition-all " onClick={()=>{route.push(`/order/[orderId]/?${product.id}`)}}>
+                                    <div className="col-span-3 p-4 bg-white hover:bg-slate-50 trasition-all " onClick={()=>{route.push(`/order/[orderId]/?${order.id}`)}}>
                                         <img
                                         className="m-auto max-h-[200px] hover:scale-110 transition-all"
                                         src={product.image}

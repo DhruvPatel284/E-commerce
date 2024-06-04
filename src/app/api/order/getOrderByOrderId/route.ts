@@ -1,9 +1,8 @@
 import prisma from "@/lib/prismadb";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
+export async function POST(
   req: NextRequest,
-  context: { params: { orderid: string } }
 ) {
   try {
     const orderId = req.nextUrl.searchParams.get("orderId");

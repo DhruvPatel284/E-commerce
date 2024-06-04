@@ -47,13 +47,9 @@ export type Order = {
   id : string;
   createdAt : Date;
   updatedAt ?: Date;
-  status:OrederStatus;
+  status:string;
 };
-enum OrederStatus{
-  Pending,
-  Delivered,
-  cancelled
-}
+
 
 export type OrderProduct = {
   id: string;
