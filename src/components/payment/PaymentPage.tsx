@@ -42,7 +42,7 @@ export const PaymentPage = () => {
   const searchParams = useSearchParams();
   const temp = searchParams.get('quantity');
   const quantity = Number(temp)
-  const orderData = useSelector((state : InitialState ) => state.order);
+  const orderData = useSelector((state : InitialState ) => state.orders);
   const dispatch = useDispatch();
   const [ ProductQuantity , setProductQuantity ] = useState<number>(quantity);
   const [ loading , setloading ] = useState<boolean>(true);
@@ -109,6 +109,16 @@ export const PaymentPage = () => {
           products:[product],
           total:total,
         })
+        const newOrder = {
+          id:response?.data.id,
+          products:[product],
+          userId:userInfo.id,
+          createdAt:response?.data.createdAt,
+          total:total,
+          updatedAt:response?.data.updatedAt,
+          status:response?.data.status,
+        }
+        dispatch(setOrderData([...orderData,newOrder]));
        
         toast.success("product orderd successfully!!");
         route.push("/order")

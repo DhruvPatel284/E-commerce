@@ -1,7 +1,7 @@
 export type InitialState = {
   userData: User;
   cart: Cart;
-  order: Order;
+  orders: Order[];
 };
 
 export type User = {
@@ -37,11 +37,23 @@ export type Cart = {
   id: string;
 };
 
+//export type Orders = Order[];
+
+
 export type Order = {
   total: number;
   products: OrderProduct[];
   userId: string;
+  id : string;
+  createdAt : Date;
+  updatedAt ?: Date;
+  status:OrederStatus;
 };
+enum OrederStatus{
+  Pending,
+  Delivered,
+  cancelled
+}
 
 export type OrderProduct = {
   id: string;

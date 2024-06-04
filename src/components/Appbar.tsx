@@ -29,7 +29,7 @@ const Appbar = () => {
   // const [userData, setUserData] = useState<User>();
   const userData = useSelector((state : InitialState) => state.userData);
   const cartData = useSelector((state : InitialState ) => state.cart);
-  const orderData = useSelector((state : InitialState ) => state.order);
+  const orderData = useSelector((state : InitialState ) => state.orders);
 
   const dispatch = useDispatch();
   const route = useRouter();
@@ -51,7 +51,7 @@ const Appbar = () => {
         const CartResponse = await axios.post(`api/cart/get/[userId]/?userId=${response.data.user.userId}`);
         dispatch(setCartData(CartResponse.data));
 
-        const OrderResponse = await axios.post(`api/order/getOrder/?userId=${userData.id}`)
+        const OrderResponse = await axios.post(`api/order/getOrder/?userId=${userData.id}`);
         dispatch(setOrderData(OrderResponse.data));
       } catch (error) {
         console.error('Error while fetching user', error);

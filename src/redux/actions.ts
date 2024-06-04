@@ -10,7 +10,7 @@ export const setCartData = (data: Cart) => ({
   payload: data,
 });
 
-export const setOrderData = (data: Order) => ({
+export const setOrderData = (data: Order[]) => ({
   type: "SET_ORDER",
   payload: data,
 });

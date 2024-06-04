@@ -14,12 +14,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCartData, setOrderData, setUserData } from "@/redux/actions";
 import { Cart, CartProduct, InitialState, Order, Product } from "@/redux/types"
 
-  interface order{
-    id:string;
-    userId:string;
-    products:OrderProduct;
-    status:OrderStatus;
-  }
+//   interface order{
+//     id:string;
+//     userId:string;
+//     products:OrderProduct[];
+//     status:OrderStatus;
+//   }
   enum OrderStatus{
     Pending,
     Delivered,
@@ -27,17 +27,18 @@ import { Cart, CartProduct, InitialState, Order, Product } from "@/redux/types"
   }
 
 const OrderPage = () => {
-    const [ orders , setOrders ] = useState<order[]>([]); 
+    const [ orders , setOrders ] = useState<Order[]>([]); 
     const [ loading , setloading ] = useState<boolean>(true);
     const userData = useSelector((state : InitialState) => state.userData);
-    const route = useRouter(); 
+    const route = useRouter();
+    const orderData = useSelector((state : InitialState ) => state.orders); 
     useEffect(() => {
         const FetchProduct = async () => {
           try{
             if(userData.id){
-                const userId = userData.id;
-                const res = await axios.post(`/api/order/getOrder/?userId=${userId}`);
-                setOrders(res?.data);
+                // const userId = userData.id;
+                // const res = await axios.post(`/api/order/getOrder/?userId=${userId}`);
+                setOrders(orderData);
                 setloading(false);
             }
           }
@@ -55,43 +56,54 @@ const OrderPage = () => {
                     My Orders
                 </div>   
             <div className="min-w-[1000px] max-w-[1100px]  h-full m-auto pt-4 bg-slate">
-            {orders &&
-            orders.map((order:order, key) => {
-                return (
-                <div key={key}>
-                    <div className="h-[250px] grid grid-cols-12  mt-[2px]  ">
-                    <div className="col-span-3 p-4 bg-white hover:bg-slate-50 trasition-all " onClick={()=>{route.push(`/order/[orderId]/?${order.id}`)}}>
-                        <img
-                        className="m-auto max-h-[200px] hover:scale-110 transition-all"
-                        src={order.products.image}
-                        alt="Search result product"
-                        />
-                    </div>
-                    <div className="col-span-9 bg-white border border-white hover:bg-gray-50 ">
-                        <div className="font-medium text-black mt-4">
-                        <div className="mb-1">
-                        <div className="text-xl xl:text-2xl mb-1 font-semibold text-slate-800">
-                            {order.products.product_name}
-                        </div>
-                        </div>
-                        <div className="text-xl xl:text-2xl text-red-600 font-semibold mt-2">
-                            Rs.{order.products.price}
-                        </div>
-                        </div>
-                
-                        <div className="bg-slate-800 w-[15%] h-10 hover:bg-slate-500 text-white font-bold py-2 px-4 border border-black-500 rounded-md mt-3">
-                            {order.status}
-                        </div>
-                    
-                    </div>
-                    </div>
-                    <div className='bg-slate-200 h-[20px]'>
+            {
+                orders &&
+                orders.map((order:Order,orderIndex:number)=>(
+                    <div key={orderIndex} className="order">
+                    {
+                        order.products.map((product:OrderProduct,productIndex:number)=>(
+                            <div key={productIndex} className="product">
+                                      <div className="h-[250px] grid grid-cols-12  mt-[2px]  ">
+                                    <div className="col-span-3 p-4 bg-white hover:bg-slate-50 trasition-all " onClick={()=>{route.push(`/order/[orderId]/?${product.id}`)}}>
+                                        <img
+                                        className="m-auto max-h-[200px] hover:scale-110 transition-all"
+                                        src={product.image}
+                                        alt="Search result product"
+                                        />
+                                    </div>
+                                    <div className="col-span-9 bg-white border border-white hover:bg-gray-50 ">
+                                        <div className="font-medium text-black mt-4">
+                                        <div className="mb-1">
+                                        <div className="text-xl xl:text-2xl mb-1 font-semibold text-slate-800">
+                                            {product.product_name}
+                                        </div>
+                                        </div>
+                                        <div className="text-xl xl:text-2xl text-red-600 font-semibold mt-2">
+                                            Rs.{product.price}
+                                        </div>
+                                        </div>
+                                
+                                       
+                                    
+                                    </div>
+                                    </div>
+                                    <div className='bg-slate-200 h-[20px]'>
 
+                                    </div>
+
+
+                        {/* // dhruvcdskjbkjcbkjcdscjdscdkjckjcdjd */}
+                            </div>
+                            
+                        ))
+                    }
                     </div>
-                </div>
-                );
-            })}
+                ))
+            }
         </div>
+
+
+
         {
             loading && 
             <div className='h-[550px]'>
@@ -123,3 +135,39 @@ const OrderPage = () => {
 }
 
 export default OrderPage;
+
+
+
+// return (
+//     <div key={key}>
+        // <div className="h-[250px] grid grid-cols-12  mt-[2px]  ">
+        // <div className="col-span-3 p-4 bg-white hover:bg-slate-50 trasition-all " onClick={()=>{route.push(`/order/[orderId]/?${order.id}`)}}>
+        //     <img
+        //     className="m-auto max-h-[200px] hover:scale-110 transition-all"
+        //     src={order.products.image}
+        //     alt="Search result product"
+        //     />
+        // </div>
+        // <div className="col-span-9 bg-white border border-white hover:bg-gray-50 ">
+        //     <div className="font-medium text-black mt-4">
+        //     <div className="mb-1">
+        //     <div className="text-xl xl:text-2xl mb-1 font-semibold text-slate-800">
+        //         {order.products.product_name}
+        //     </div>
+        //     </div>
+        //     <div className="text-xl xl:text-2xl text-red-600 font-semibold mt-2">
+        //         Rs.{order.products.price}
+        //     </div>
+        //     </div>
+    
+        //     <div className="bg-slate-800 w-[15%] h-10 hover:bg-slate-500 text-white font-bold py-2 px-4 border border-black-500 rounded-md mt-3">
+        //         {order.status}
+        //     </div>
+        
+        // </div>
+        // </div>
+        // <div className='bg-slate-200 h-[20px]'>
+
+        // </div>
+//     </div>
+//     );
