@@ -20,11 +20,11 @@ import { Cart, CartProduct, InitialState, Order, Product } from "@/redux/types"
 //     products:OrderProduct[];
 //     status:OrderStatus;
 //   }
-  enum OrderStatus{
-    Pending,
-    Delivered,
-    cancelled
-  }
+//   enum OrderStatus{
+//     Pending,
+//     Delivered,
+//     cancelled
+//   }
 
 const OrderPage = () => {
     const [ orders , setOrders ] = useState<Order[]>([]); 
@@ -36,8 +36,9 @@ const OrderPage = () => {
         const FetchProduct = async () => {
           try{
             if(userData.id){
-                // const userId = userData.id;
-                // const res = await axios.post(`/api/order/getOrder/?userId=${userId}`);
+                //  const userId = userData.id;
+                //  const res = await axios.post(`/api/order/getOrder/?userId=${userId}`);
+                // console.log(orderData)
                 setOrders(orderData);
                 setloading(false);
             }

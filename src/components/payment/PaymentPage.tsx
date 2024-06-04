@@ -24,6 +24,7 @@ interface Product {
   stock : number;
   quantity : number;
 }
+
 interface User {
   id : string;
   email : string;

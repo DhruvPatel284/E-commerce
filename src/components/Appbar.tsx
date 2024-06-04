@@ -50,9 +50,13 @@ const Appbar = () => {
 
         const CartResponse = await axios.post(`api/cart/get/[userId]/?userId=${response.data.user.userId}`);
         dispatch(setCartData(CartResponse.data));
-
-        const OrderResponse = await axios.post(`api/order/getOrder/?userId=${userData.id}`);
-        dispatch(setOrderData(OrderResponse.data));
+        
+        if(userData.id){
+          const OrderResponse = await axios.post(`api/order/getOrder/?userId=${userData.id}`);
+          console.log("order response:",OrderResponse?.data)
+          dispatch(setOrderData(OrderResponse?.data));
+        }
+        
       } catch (error) {
         console.error('Error while fetching user', error);
       }
