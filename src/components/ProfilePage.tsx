@@ -39,6 +39,7 @@ interface User {
 }
 const ProfilePage = () => {
   const cartData = useSelector((state : InitialState ) => state.cart)
+  const userData = useSelector((state : InitialState) => state.userData)
   const [loading, setLoading] = useState(true);
   const [userInfo, setUserInfo] = useState<User>({
     id : "",
@@ -55,11 +56,11 @@ const ProfilePage = () => {
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const response = await isAuthenticated();
-        if (!response || response.status !== 200) {
-          return;
-        }
-        const userId = response.data.user.userId;
+        // const response = await isAuthenticated();
+        // if (!response || response.status !== 200) {
+        //   return;
+        // }
+        const userId = userData.id;
         const res = await axios.get(`/api/user/Auth/getPersonalInfo/[userId]/?userId=${userId}`);
 
         setUserInfo(res.data.user);
