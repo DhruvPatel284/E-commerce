@@ -31,7 +31,7 @@ export const Signin = () =>{
                         Login
                     </div>
                     <div className="text-slate-500 mt-3 ">
-                        Don't have an account?
+                        Dont have an account?
                         <Link href = "/signup"  className="pl-2 underline" >
                             Sign up
                         </Link>

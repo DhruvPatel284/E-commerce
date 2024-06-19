@@ -42,7 +42,7 @@ const HomePage = () => {
 
   return (
     <div className="bg-slate-100 ">
-      <HomePageLamp children="D-Kart"/>
+      <HomePageLamp >D-Kart</HomePageLamp>
       <div>
       <div className="h-[100px]"></div>
       {data &&

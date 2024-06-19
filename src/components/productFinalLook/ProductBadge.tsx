@@ -3,7 +3,7 @@ const ProductBadge = ({ badge }:any) => {
   if (badge === "choice") {
     return (
       <span className="text-xs xl:text-sm bg-slate-800 text-white p-1">
-        Dkart's <span className="text-orange-500">Choice</span>
+        Dkarts <span className="text-orange-500">Choice</span>
       </span>
     );
   } else if (badge === "seller") {

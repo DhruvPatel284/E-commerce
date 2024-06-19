@@ -99,7 +99,7 @@ const PaymentCartPage = () => {
        {!loading &&
         cartData.products && cartData.products.map((product:CartProduct)=>{
             return (
-                <div>
+                <div key={product.id}>
                     <div>
                       <div>
                         <div className="mt-10 w-[1000px] ml-[15%]" key={product.id}>

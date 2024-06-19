@@ -5,8 +5,8 @@ const Quote = () => {
         <div className="flex justify-center">
             <div className="max-w-lg">
                <div className="text-2xl font-bold">
-                   "The customer support And feedback I received was exceptional.The support team went above and beyond to
-                   address my concerns"
+                   The customer support And feedback I received was exceptional.The support team went above and beyond to
+                   address my concerns
                </div>
                <div className="max-w-md text-sm  text-slate-800 mt-3">
                     CEO | Dhruv patel
