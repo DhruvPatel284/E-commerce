@@ -54,7 +54,7 @@ export const ProductFinalCard = () => {
     useEffect(() => {
         const ProductData = async () => {
             try{
-                console.log(params.productId);
+                console.log("userData",userData);
                 const response = await axios.post(`/api/user/product/getProduct/[productId]`,
                 {
                     "productId" : params.productId
