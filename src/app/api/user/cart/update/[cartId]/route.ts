@@ -3,10 +3,10 @@ import { NextResponse ,NextRequest} from "next/server";
 
 export async function POST(
   req: NextRequest,
-  context: { params: { userId: string } }
+  context: { params: { cartId: string } }
 ) {
   //const cartId = req.nextUrl.searchParams.get("cartId");
-  const cartId = context.params.userId
+  const cartId = context.params.cartId
   if (cartId === null) {
     return new NextResponse("CartId parameter is missing", { status: 400 });
   }
