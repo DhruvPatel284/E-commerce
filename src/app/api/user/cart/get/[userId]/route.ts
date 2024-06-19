@@ -5,8 +5,9 @@ export async function POST(
   req: NextRequest,
 ) {
   const userId = req.nextUrl.searchParams.get("userId");
+  console.log(userId)
   if (userId === null) {
-    return new NextResponse("CartId parameter is missing", { status: 400 });
+    return new NextResponse("userId parameter is missing", { status: 400 });
   }
   try {
     const cart = await prisma.cart.findFirst({
