@@ -41,7 +41,7 @@ const montserrat = Montserrat({ subsets: ["latin"] });
 
 
 export const metadata: Metadata = {
-  title: "Ecommercely Website - Krish Jotaniya",
+  title: "D-Kart Website - Dhruv Patel",
   description: "Buy the best product at cheaper rates",
 };
 
