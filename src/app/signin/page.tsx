@@ -4,7 +4,7 @@ import Quote from "@/components/auth/Quote";
 import Signin from "@/components/auth/Signin";
 
 
-const page = () => {
+const signin = () => {
   return (
     <div>
         <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -18,4 +18,4 @@ const page = () => {
     </div>
   )
 }
-export default page;
+export default signin;

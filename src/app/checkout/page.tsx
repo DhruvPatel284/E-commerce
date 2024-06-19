@@ -5,7 +5,7 @@ import { setCartData, setOrderData, setUserData } from "@/redux/actions";
 import { Cart, CartProduct, InitialState, Order } from "@/redux/types"
 import CheckOutPage from "@/components/cart/CheckOutPage";
 
-export const page = () => {
+export const Checkout = () => {
  
   return (
     <div>
@@ -15,4 +15,4 @@ export const page = () => {
     </div>
   )
 }
-export default page;
+export default Checkout;
