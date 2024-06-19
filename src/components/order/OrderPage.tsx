@@ -37,7 +37,7 @@ const OrderPage = () => {
         const FetchProduct = async () => {
           try{
             if(userData.id){
-                const OrderResponse = await axios.post(`api/user/order/getOrder/?userId=${userData.id}`);
+                const OrderResponse = await axios.post(`api/user/order/getOrder/${userData.id}`);
                 setOrders(OrderResponse.data);
                 setloading(false);
             }

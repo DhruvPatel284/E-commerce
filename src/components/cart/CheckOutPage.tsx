@@ -48,7 +48,7 @@ export const CheckOutPage =  () => {
                 id : cartData.id,
                 products : FilteredNewCartData
             }
-            const DeletedResponce = await axios.post(`api/user/cart/update/[cartId]/?cartId=${cartData.id}`,newCartVAlue);
+            const DeletedResponce = await axios.post(`api/user/cart/update/${cartData.id}`,newCartVAlue);
             dispatch(setCartData(DeletedResponce.data));
 
         }
@@ -71,7 +71,7 @@ export const CheckOutPage =  () => {
                 id : cartData.id,
                 products : quantityUpdatedData
             }
-            const incrementedResponse = await axios.post(`api/user/cart/update/[cartId]/?cartId=${cartData.id}`,newCartVAlue);
+            const incrementedResponse = await axios.post(`api/user/cart/update/${cartData.id}`,newCartVAlue);
             dispatch(setCartData(incrementedResponse.data));
         }
         catch(e){
@@ -97,7 +97,7 @@ export const CheckOutPage =  () => {
                     id : cartData.id,
                     products : quantityUpdatedData
                 }
-                const decrementedResponse = await axios.post(`api/user/cart/update/[cartId]/?cartId=${cartData.id}`,newCartVAlue);
+                const decrementedResponse = await axios.post(`api/user/cart/update/${cartData.id}`,newCartVAlue);
                 dispatch(setCartData(decrementedResponse.data));
             }
             

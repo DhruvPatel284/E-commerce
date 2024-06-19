@@ -14,7 +14,7 @@ const Footer = () => {
           <Github size={20} />
         </Link>
         <Link
-          href={"https://www.linkedin.com/in/kunjdave/"}
+          href={"https://www.linkedin.com/in/dhruvpatel156/"}
           target="_blank"
         >
           <Linkedin size={20} />

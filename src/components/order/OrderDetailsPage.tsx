@@ -33,7 +33,7 @@ const OrderDetailsPage = () => {
   useEffect(() => {
     const DateFormater = async () => {
       try{
-        const res = await axios.post(`/api/user/order/getOrderByOrderId/?orderId=${param.orderId}`);
+        const res = await axios.post(`/api/user/order/getOrderByOrderId/${param.orderId}`);
         setOrder(res.data);
         setLoading(false);
       }

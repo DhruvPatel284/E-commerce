@@ -3,9 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: NextRequest,
+  context: { params: { orderId: string } }
 ) {
   try {
-    const orderId = req.nextUrl.searchParams.get("orderId");
+    //const orderId = req.nextUrl.searchParams.get("orderId");
+    const orderId = context.params.orderId
     if (orderId === null) {
       return new NextResponse("orderId parameter is missing", { status: 400 });
     }

@@ -52,7 +52,7 @@ const PaymentCartPage = () => {
           try{
         
             const userId = userData.id;
-            const res = await axios.get(`/api/user/Auth/getPersonalInfo/[userId]/?userId=${userId}`);
+            const res = await axios.get(`/api/user/Auth/getPersonalInfo/${userId}`);
             let amount:number = 0;
              const totalamount = cartData.products.map((product:CartProduct)=>{
                 amount += product.price;
@@ -80,7 +80,7 @@ const PaymentCartPage = () => {
                 products:cartData.products,
                 total:total,
               })
-              const res = await axios.post(`/api/user/cart/clear/[cartId]/?cartId=${cartData.id}`);
+              const res = await axios.post(`/api/user/cart/clear/${cartData.id}`);
               dispatch(setCartData({ products: [], id: "" }));
               toast.success("product orderd successfully!!");
               route.push("/order")
