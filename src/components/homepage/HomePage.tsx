@@ -1,5 +1,5 @@
 "use client"
-import { CardComponent  , } from "./CardComponent";
+
 import HomepageImage from "./HomepageImage";
 import HomepageProductCard from "./HomepageProductCard";
 import HomePageLamp from "./HomePageLamp";
