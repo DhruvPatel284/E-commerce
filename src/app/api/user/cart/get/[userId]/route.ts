@@ -3,8 +3,9 @@ import { NextResponse,NextRequest } from "next/server";
 
 export async function POST(
   req: NextRequest,
+  context: { params: { userId: string } }
 ) {
-  const userId = req.nextUrl.searchParams.get("userId");
+  const userId = context.params.userId;
   console.log(userId)
   if (userId === null) {
     return new NextResponse("userId parameter is missing", { status: 400 });
