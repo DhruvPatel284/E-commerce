@@ -25,7 +25,7 @@ export async function POST(
     if (cart) {
       return NextResponse.json(newCart);
     } else {
-      return new NextResponse("Cart not found", { status: 200 });
+      return new NextResponse("Cart not found", { status: 205 });
     }
   } catch (error) {
     return new NextResponse("Internal Error", { status: 500 });
