@@ -1,19 +1,19 @@
-
 "use client"
 import axios from "axios";
 import { Activity, ActivityIcon, ActivitySquareIcon } from "lucide-react";
 import Link from "next/link";
-import { useParams,useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { isAuthenticated } from "../productFinalLook/ProductFinalCard";
 import { Button } from "../ui/Button";
 import { Skeleton } from "../ui/skeleton";
 import toast from "react-hot-toast";
-import { UserInfo } from "os";
-import { useDispatch,useSelector } from "react-redux";
-import { Cart, CartProduct, InitialState, Order } from "@/redux/types"
+import { InitialState, OrderProduct } from "@/redux/types";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setOrderData } from "@/redux/actions";
+
 interface Product {
   product_name: string;
   product_description: string;
@@ -24,7 +24,6 @@ interface Product {
   stock : number;
   quantity : number;
 }
-
 interface User {
   id : string;
   email : string;
@@ -37,15 +36,15 @@ interface User {
   country?: string;
 }
 export const PaymentPage = () => {
-  const userData = useSelector((state : InitialState) => state.userData);
+
   const route = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
   const temp = searchParams.get('quantity');
   const quantity = Number(temp)
+  const [ ProductQuantity , setProductQuantity ] = useState<number>(quantity);
   const orderData = useSelector((state : InitialState ) => state.orders);
   const dispatch = useDispatch();
-  const [ ProductQuantity , setProductQuantity ] = useState<number>(quantity);
   const [ loading , setloading ] = useState<boolean>(true);
   const [ product , setProduct ] = useState<Product>({
     product_name: "",
@@ -55,8 +54,7 @@ export const PaymentPage = () => {
     id: "",
     category: "",
     stock : 0,
-    quantity:quantity
-
+    quantity: 0
   });
   const [userInfo, setUserInfo] = useState<User>({
     id : "",
@@ -73,18 +71,21 @@ export const PaymentPage = () => {
   useEffect(() => {
     const FetchProduct = async () => {
       try{
-    
-        const userId = userData.id;
-        const res = await axios.get(`/api/user/auth/getPersonalInfo/[userId]/?userId=${userId}`);
-  
+        const response = await isAuthenticated();
+        if (!response || response.status !== 200) {
+          return;
+        }
+        const userId = response.data.user.userId;
+        const res = await axios.get(`/api/user/Auth/getPersonalInfo/[userId]/?userId=${userId}`);
+
         setUserInfo(res.data.user);
 
-     
-        const resp = await axios.post(`/api/product/getProduct/[productId]`,
+        
+
+        const resp = await axios.post(`/api/user/product/getProduct/[productId]`,
                 {
                     "productId" : params.productId
                   })
-        
         setProduct(resp.data);
         setloading(false);
       }
@@ -105,7 +106,7 @@ export const PaymentPage = () => {
       else{
         product.quantity = ProductQuantity;
         const total = product.price*ProductQuantity;
-        const response = await axios.post(`/api/order/addOrder`,{
+        const response = await axios.post(`/api/user/order/addOrder`,{
           userId:userInfo.id,
           products:[product],
           total:total,
@@ -130,7 +131,6 @@ export const PaymentPage = () => {
     }
   }
 
-
   if (loading) {
     return <div className="w-[1000px] ml-[15%]">
       <Skeleton className="h-[200px] mt-5"/>
@@ -141,6 +141,7 @@ export const PaymentPage = () => {
   }
   return (
     <div>
+
         <div className=" text-slate-800 text-xl md:text-3xl font-bold flex items-center justify-center mt-6">
             <ActivitySquareIcon className="mr-2"/>Make Payment
         </div>

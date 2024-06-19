@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 import Appbar from "@/components/Appbar";
 import { Providers } from "@/redux/provider";
+import Footer from "./Footer";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -15,6 +16,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     <Providers>
       {!noAppbarPaths.includes(pathname) && <Appbar />}
       {children}
+      {!noAppbarPaths.includes(pathname) && <Footer />}
       <Toaster position="bottom-right" />
     </Providers>
   );

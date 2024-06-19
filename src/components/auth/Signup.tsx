@@ -22,7 +22,7 @@ export const Signup = () =>{
         
         try{
             console.log(inputs)
-            const response = await axios.post("http://localhost:3000/api/user/auth/signup",inputs);
+            const response = await axios.post("api/user/Auth/signup",inputs);
             console.log(response);
             navigate.push("/");
             toast.success("Account Created SuccessFully");

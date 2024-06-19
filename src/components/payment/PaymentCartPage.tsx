@@ -1,3 +1,4 @@
+
 "use client"
 import axios from "axios";
 import { Activity, ActivityIcon, ActivitySquareIcon } from "lucide-react";
@@ -6,13 +7,12 @@ import { useParams,useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { isAuthenticated } from "../productFinalLook/ProductFinalCard";
-import { Button } from "../ui/Button";
 import { Skeleton } from "../ui/skeleton";
 import toast from "react-hot-toast";
 import { UserInfo } from "os";
 import { useDispatch,useSelector } from "react-redux";
 import { Cart, CartProduct, InitialState, Order } from "@/redux/types"
-import { setOrderData } from "@/redux/actions";
+import { setCartData, setOrderData } from "@/redux/actions";
 
 
 interface User {
@@ -30,7 +30,8 @@ const PaymentCartPage = () => {
     const userData = useSelector((state : InitialState) => state.userData);
     const cartData = useSelector((state : InitialState ) => state.cart);
     const [ loading , setloading ] = useState<boolean>(true);
-    const [totalPrice,setTotalPrice] = useState<Number>(0);
+    const route = useRouter();
+    const [totalPrice,setTotalPrice] = useState<number>(0);
     let amount:number = 0;
     const dispatch = useDispatch();
 
@@ -51,7 +52,7 @@ const PaymentCartPage = () => {
           try{
         
             const userId = userData.id;
-            const res = await axios.get(`/api/user/auth/getPersonalInfo/[userId]/?userId=${userId}`);
+            const res = await axios.get(`/api/user/Auth/getPersonalInfo/[userId]/?userId=${userId}`);
             let amount:number = 0;
              const totalamount = cartData.products.map((product:CartProduct)=>{
                 amount += product.price;
@@ -66,7 +67,30 @@ const PaymentCartPage = () => {
         }
         FetchProduct();
       }, [])
-    
+      const PaymentOnClickHandler = async () => {
+        try{
+            if ( !userInfo.phoneno ) {
+              toast.error("please fill all details")
+              route.push("/profile");
+            }
+            else{
+              const total = totalPrice;
+              const response = await axios.post(`/api/user/order/addOrder`,{
+                userId:userInfo.id,
+                products:cartData.products,
+                total:total,
+              })
+              const res = await axios.post(`/api/user/cart/clear/[cartId]/?cartId=${cartData.id}`);
+              dispatch(setCartData({ products: [], id: "" }));
+              toast.success("product orderd successfully!!");
+              route.push("/order")
+            }  
+          }
+          catch(e){
+            toast.error("product order failed!!");
+          }
+      }
+
   return (
     <div>
          <div className=" text-slate-800 text-xl md:text-3xl font-bold flex items-center justify-center mt-6">
@@ -102,11 +126,7 @@ const PaymentCartPage = () => {
                                                 </div>
                                                 
                                             </div>
-                                        </div>
-                                        
-            
-                                        
-                                        
+                                        </div>    
                                     </div>
                                     </div>
                                     <div className="col-span-3 xl:col-span-2 ml-5" >
@@ -115,33 +135,7 @@ const PaymentCartPage = () => {
                                         </div>
                                         <div className="mt-3">
                                             
-                                            {/* <div className="grid grid-cols-3 w-20 text-center">
-                                                <button
-                                                    className="text-xl xl:text-2xl bg-gray-400 rounded cursor-pointer hover:bg-gray-500"
-                                                    onClick={() => {
-                                                      if( ProductQuantity === 1 ){
-                                                        toast.error("Can't have Quantity ZERO");
-                                                      }
-                                                      else{
-                                                        setProductQuantity(ProductQuantity - 1);
-                                                      }
-                                                      
-                                                    }}
-                                                >
-                                                    -
-                                                </button>
-                                                <div className="text-lg xl:text-xl bg-gray-200">
-                                                    {ProductQuantity}
-                                                </div>
-                                                <button
-                                                    className="text-xl xl:text-2xl bg-gray-400 hover:bg-gray-500 rounded cursor-pointer"
-                                                    onClick={() => {
-                                                      setProductQuantity(ProductQuantity + 1);
-                                                    }}
-                                                >
-                                                    +
-                                                </button>
-                                            </div> */}
+                                
                                         </div>
                                     </div>
                                 </div>
@@ -158,7 +152,7 @@ const PaymentCartPage = () => {
         <div className="w-[1000px] ml-[15%]">
                               <div className="bg-black mt-5 h-[1px]  flex justify-center"></div>
                               <div className="mt-2 flex text-xl font-semibold justify-end  ">
-                                Total price :- <div className="text-red-700 ml-5">  Rs. { totalPrice }</div>
+                                Total price :- <div className="text-red-700 ml-5">  Rs. {totalPrice} </div>
                               </div>
                               
                               <div>
@@ -178,13 +172,13 @@ const PaymentCartPage = () => {
                                   <div className="h-[0.1px] bg-slate-800" />
                                   <div className="mt-3 text-xl font-semibold">
                                     <div className="">
-                                      Name : {userInfo.username}
+                                      Name : {userInfo?.username}
                                     </div>
                                     <div className="">
-                                      Email : {userInfo.email}
+                                      Email : {userInfo?.email}
                                     </div>
                                     <div className="">
-                                     phone No. : {userInfo.phoneno}
+                                     phone No. : {userInfo?.phoneno}
                                     </div>
                                   </div>
                                   <div className="flex text-blue-700 text-md md:text-2xl font-semibold mt-5">
@@ -198,33 +192,36 @@ const PaymentCartPage = () => {
                                   <div className="h-[0.1px] bg-slate-800" />
                                   <div className="mt-3 text-xl font-semibold">
                                     <div className="">
-                                      Country : {userInfo.country}
+                                      Country : {userInfo?.country}
                                     </div>
                                     <div className="flex">
                                       <div>
                                         Address :
                                       </div> 
                                       <div className="ml-1">
-                                       {userInfo.address}
+                                       {userInfo?.address}
                                       </div>
                                     </div>
                                     <div className="">
-                                      State : {userInfo.state}
+                                      State : {userInfo?.state}
                                     </div>
                                     <div className="">
-                                     City : {userInfo.city}
+                                     City : {userInfo?.city}
                                     </div>
                                     <div className="">
-                                     pincode : {userInfo.pincode}
+                                     pincode : {userInfo?.pincode}
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                             <div className="flex justify-center">
-                      {/* <button onClick={PaymentOnClickHandler} className="bg-slate-800 h-[50px] w-[20%]  hover:bg-green-700 text-white font-bold py-2 px-4 border text-md md:text-xl border-black-500 rounded-md mt-16 ">
+                       <button onClick={PaymentOnClickHandler} className="bg-slate-800 h-[50px] w-[20%]  hover:bg-green-700 text-white font-bold py-2 px-4 border text-md md:text-xl border-black-500 rounded-md mt-16 ">
                         Complete Payment
-                      </button> */}
+                      </button> 
+                    </div>
+                    <div className="h-10">
+
                     </div>
     </div>
   )

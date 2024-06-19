@@ -5,10 +5,11 @@ import { useEffect, useState } from "react"; // Corrected useState import
 import axios from "axios";
 import Link from "next/link"; // Corrected Link import
 import ProductDetails from '@/components/productFinalLook/ProductDetails';
-import { Product } from '@/components/homepage/HomePage';
-import Appbar from '@/components/Appbar';
+
 import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Product } from '@/components/Search';
+import Appbar from '@/components/Appbar';
 const ProductSuggestion = () => {
     const searchParams = useSearchParams()
     const router = useRouter();
@@ -17,7 +18,7 @@ const ProductSuggestion = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const fetchData = async () => {
         try {
-            const response = await axios.get<Product[]>('/api/product/getProduct');
+            const response = await axios.get<Product[]>('/api/user/product/getProduct');
             const results = response.data.filter((product) =>
                 product.product_name.toLowerCase().includes(searchTerm?.toLowerCase()||"")
               );
@@ -35,15 +36,15 @@ const ProductSuggestion = () => {
     
 
     return (
-       <div className='bg-slate-200'>
-           
+       <div className='bg-slate-100 min-h-[590px]'>
+          
           <div className="min-w-[1000px] max-w-[1100px]  h-full m-auto pt-4 bg-slate">
         {products &&
           products.map((product, key) => {
             return (
               <Link key={key} href={`/product/${product.id}`}>
                 <div className="h-[250px] grid grid-cols-12  mt-[2px]  ">
-                  <div className="col-span-3 p-4 bg-white hover:bg-slate-50 trasition-all">
+                  <div className="col-span-3 p-4 bg-white trasition-all">
                     <img
                       className="m-auto max-h-[200px] hover:scale-110 transition-all"
                       src={product.image}
@@ -70,9 +71,6 @@ const ProductSuggestion = () => {
                       </button>
                 
                   </div>
-                </div>
-                <div className='bg-slate-200 h-[20px]'>
-
                 </div>
               </Link>
             );

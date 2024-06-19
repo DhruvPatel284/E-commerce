@@ -39,7 +39,6 @@ interface User {
 }
 const ProfilePage = () => {
   const cartData = useSelector((state : InitialState ) => state.cart)
-  const userData = useSelector((state : InitialState) => state.userData);
   const [loading, setLoading] = useState(true);
   const [userInfo, setUserInfo] = useState<User>({
     id : "",
@@ -56,12 +55,12 @@ const ProfilePage = () => {
   useEffect(() => {
     const getUserData = async () => {
       try {
-        // const response = await isAuthenticated();
-        // if (!response || response.status !== 200) {
-        //   return;
-        // }
-        const userId = userData.id;
-        const res = await axios.get(`/api/user/auth/getPersonalInfo/[userId]/?userId=${userId}`);
+        const response = await isAuthenticated();
+        if (!response || response.status !== 200) {
+          return;
+        }
+        const userId = response.data.user.userId;
+        const res = await axios.get(`/api/user/Auth/getPersonalInfo/[userId]/?userId=${userId}`);
 
         setUserInfo(res.data.user);
         setLoading(false);
@@ -97,7 +96,7 @@ const ProfilePage = () => {
   const updateAddressHandler = async (values: z.infer<typeof formSchema>) => {
       try {
         toast.loading("Updating Profile");
-        const response = await axios.post(`/api/user/auth/updateuser/[userId]/?userId=${userInfo.id}` , values );
+        const response = await axios.post(`/api/user/Auth/updateuser/[userId]/?userId=${userInfo.id}` , values );
         toast.dismiss();
         toast.success("Profile Updated"); 
       } catch (error : any) {
@@ -109,9 +108,6 @@ const ProfilePage = () => {
 
   return (
     <div>
-      <div>
-        
-      </div>
       <div> 
           <main className="flex w-full justify-center items-center">
           {!loading && (
@@ -123,7 +119,7 @@ const ProfilePage = () => {
               <div className="mt-8 h-[1px] bg-slate-900"/>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(updateAddressHandler)}>
-                  <p className="font  mt-3 mb-3 text-blue-700 text-base md:text-lg flex justify-center">
+                  <p className="font-medium  mt-3 mb-3 text-blue-700 text-base md:text-lg flex justify-center">
                     Personal Details
                   </p>
                   <Separator className="mb-4 mt-2" />
@@ -251,12 +247,12 @@ const ProfilePage = () => {
             </section>
           )}
           {loading && (
-            <div>
-            <Skeleton className="h-[100px] w-[1000px] flex justify-center mt-3 bg-slate-400 items-center "/>
-            <Skeleton className="h-[100px] w-[1000px] flex justify-center mt-3 bg-slate-400 items-center "/>
-            <Skeleton className="h-[100px] w-[1000px] flex justify-center mt-3 bg-slate-400 items-center "/>
-            <Skeleton className="h-[100px] w-[1000px] flex justify-center mt-3 bg-slate-400 items-center "/>
-            <Skeleton className="h-[100px] w-[1000px] flex justify-center mt-3 bg-slate-400 items-center "/>
+            <div className="min-h-[590px]">
+              <Skeleton className="h-[100px] w-[1000px] flex justify-center mt-3 bg-slate-400 items-center "/>
+              <Skeleton className="h-[100px] w-[1000px] flex justify-center mt-3 bg-slate-400 items-center "/>
+              <Skeleton className="h-[100px] w-[1000px] flex justify-center mt-3 bg-slate-400 items-center "/>
+              <Skeleton className="h-[100px] w-[1000px] flex justify-center mt-3 bg-slate-400 items-center "/>
+              <Skeleton className="h-[100px] w-[1000px] flex justify-center mt-3 bg-slate-400 items-center "/>
             </div>
           )}
         </main>

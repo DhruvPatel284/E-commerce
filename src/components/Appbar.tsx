@@ -1,4 +1,5 @@
-"use client";
+
+"use client"
 import { isAuthenticated } from "./productFinalLook/ProductFinalCard";
 import axios from "axios";
 import { useRouter } from 'next/navigation';
@@ -25,11 +26,9 @@ import { Cart, CartProduct, InitialState, Order, Product } from "@/redux/types"
 
 const Appbar = () => {
   const [isUserExisted, setIsUserExisted] = useState(false);
-  // const [userData, setUserData] = useState<User>();
   const userData = useSelector((state : InitialState) => state.userData);
   const cartData = useSelector((state : InitialState ) => state.cart);
   const orderData = useSelector((state : InitialState ) => state.orders);
-
   const dispatch = useDispatch();
   const route = useRouter();
   useEffect(() => {
@@ -47,15 +46,12 @@ const Appbar = () => {
         }
         dispatch(setUserData(user));
 
-        const CartResponse = await axios.post(`api/cart/get/[userId]/?userId=${response.data.user.userId}`);
+        const CartResponse = await axios.post(`api/user/cart/get/[userId]/?userId=${response.data.user.userId}`);
         dispatch(setCartData(CartResponse.data));
         
         if(userData.id){
-          const OrderResponse = await axios.post(`api/order/getOrder/?userId=${userData.id}`);
-          console.log("order response:",OrderResponse?.data)
-          dispatch(setOrderData(OrderResponse?.data));
+          
         }
-        
       } catch (error) {
         console.error('Error while fetching user', error);
       }
@@ -64,20 +60,20 @@ const Appbar = () => {
   }, [userData.id,dispatch]);
   const logoutHandler = async () => {
     try {
-      await axios.get("/api/user/auth/signout");
+      await axios.get("/api/user/Auth/signout");
+      dispatch(setUserData({
+        id: "",
+        username: "",
+        email : ""
+      }))
+      dispatch(setCartData({
+        id:"",
+        products : []
+      }))
       toast.success("Log Out Successfully");
-      setIsUserExisted(false);
-      const userEmptyData = {
-        username: "", email: "", id: "" 
-      }
-      const cartEmptyData = {
-        products: [], id: "" 
-      }
-      dispatch(setUserData(userEmptyData))
-      dispatch(setCartData(cartEmptyData))
-      route.replace("/");
+      window.location.href = "/";
     } catch (error: any) {
-      toast.error("Log Out Failed");
+    
     }
   }
   const renderUserButton = () => {
@@ -107,15 +103,17 @@ const Appbar = () => {
                 <DropdownMenuItem
                   className="cursor-pointer text-blue-900 font-semibold"
                   onClick={() => {
-                      route.push("/profile");
-                    }
+                    route.push("/profile");
+                  }
                   }
                 >
                   Personal Info
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer text-blue-900 font-semibold"
-                  onClick={()=>{route.push("/order")}}
+                  onClick={() => {
+                    route.push("/order");
+                  }}
                 >
                   My Orders
                 </DropdownMenuItem>
@@ -154,7 +152,7 @@ const Appbar = () => {
             />
           </Link>
           <div className="pr-4 pl-2">
-            <div className="text-sm xl:text-base font-bold">Ship-Shop-Shup</div>
+            <div className="text-sm xl:text-base font-bold">D-Kart</div>
           </div>
         </div>
         {/* Middle */}

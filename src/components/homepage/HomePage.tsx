@@ -1,66 +1,61 @@
-"use client";
-
+"use client"
+import { CardComponent  , } from "./CardComponent";
+import HomepageImage from "./HomepageImage";
 import HomepageProductCard from "./HomepageProductCard";
 import HomePageLamp from "./HomePageLamp";
+
 import { useEffect, useState } from "react";
 import axios from "axios";
-import CategorywiseProducts from "./CategorywiseProducts"
-import toast from "react-hot-toast";
+import CategorywiseProducts from "./CategorywiseProducts";
+import { number } from "zod";
+import CardContainer from "./MoveAbleCard";
+import Faqs from "../Faqs";
 
-export interface Product {
+interface Product {
   id: string;
-  image: string;
   product_name: string;
-  price: number;
-  product_description:string;
-  Category: Category;
-  quantity:number;
+  product_description ?: string;
+  price: number; 
+  stock : number;
+  image : string;
+  createdAt ?: Date         
+  updatedAt ?: Date    
+  category: String;              
 }
-export interface Category {
-  id: string;
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
-  products: Product[];
-}
-
 
 
 const HomePage = () => {
-
-     const[data,setData] = useState([]);
-
-     useEffect(() => {
-      const getCategoryData = async () => {
-        try {
-          const response = await axios.post("/api/category/getCategory");
-          setData(response.data);
-        } catch (error: any) {
-          return new Error("error while fetching the data!!!")
-        }
-      };
-      getCategoryData();
-    }, []);
-
-
-    
-   
+  
+  const [ data , setData ] = useState([]);
+  useEffect(() => {
+    const getCategoryData = async () => {
+      try{
+        const response = await axios.post("api/user/category/getCategory")
+        setData(response.data);
+      }
+      catch(e){
+        return new Error("error while fetching the data!!!")
+      }
+    }
+    getCategoryData();
+  },[])
 
   return (
-    <div className="bg-slate-100">
-      <HomePageLamp children="Ship Shop Shou"/>
-      
+    <div className="bg-slate-100 ">
+      <HomePageLamp children="D-Kart"/>
+      <div>
+      <div className="h-[100px]"></div>
       {data &&
-        data.map((category: { id: string; name: string; products: Product[] }) => {
+        data.map((category: { id: string; name: string; products : Product[] }) => {
              return(
               <CategorywiseProducts key={category.id} title ={category.name} products={category.products} />
              );
         })
       }
     </div>
+      <Faqs/>
+    </div>
   );
-
-
 };
 
 export default HomePage;

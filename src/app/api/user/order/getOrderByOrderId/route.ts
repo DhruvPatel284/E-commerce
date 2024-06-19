@@ -17,9 +17,9 @@ export async function POST(
     });
     console.log(order);
     if (order) {
-      return NextResponse.json({
+      return NextResponse.json(
         order
-      });
+      );
     } else {
       return new NextResponse("Order not found", { status: 200 });
     }

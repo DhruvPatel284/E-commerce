@@ -13,7 +13,7 @@ export const Signin = () =>{
     })
     async function sendRequest(){
         try{
-            const response = await axios.post("api/user/auth/signin", inputs);
+            const response = await axios.post("api/user/Auth/signin", inputs);
             const token =  response.data;
             //console.log(response.data);
             navigate.push("/");

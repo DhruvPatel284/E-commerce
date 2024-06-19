@@ -1,5 +1,6 @@
+
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
-import { isAuthenticated } from "./productFinalLook/ProductFinalCard";
+
 import axios from "axios";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
@@ -22,14 +23,12 @@ export interface Product {
 const Search = () => {
     const [suggestions , setSuggestions ] = useState<string[]>([]);
     const [ searchTerm , setSearchTerm ] = useState<string>();
-
     const navigate = useRouter();
-    //@ts-ignore
-    const handleSearch = (e) => {
+    const handleSearch = (e:any) => {
         e.preventDefault();
         if( searchTerm ){
             const params = new URLSearchParams({ searchTerm: searchTerm });
-            setSearchTerm('');
+            setSuggestions([]);
             navigate.push(`/product?${params.toString()}`);
         }
         else{
@@ -39,18 +38,15 @@ const Search = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get<Product[]>('/api/product/getProduct');
+            const response = await axios.get<Product[]>('/api/user/product/getProduct');
             const names = response.data.map(product => product.product_name);
             setSuggestions(names);
-            console.log('Product Names:', names);
           } catch (error) {
             console.error('Error fetching product data:', error);
           }
         };
         fetchData();
-      }, []);
-
-
+      }, [searchTerm]);
 
   return(
         <div className="w-[900px]">
