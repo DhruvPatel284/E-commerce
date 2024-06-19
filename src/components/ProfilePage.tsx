@@ -61,6 +61,7 @@ const ProfilePage = () => {
         //   return;
         // }
         const userId = userData.id;
+        console.log(userId);
         const res = await axios.get(`/api/user/Auth/getPersonalInfo/[userId]/?userId=${userId}`);
 
         setUserInfo(res.data.user);
