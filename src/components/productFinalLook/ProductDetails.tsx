@@ -1,5 +1,5 @@
 import ProductBadge from "./ProductBadge";
-import ProductRatings from "./ProductRatings";
+
 
 interface ProductDetailsProps{
   product_name: string;
