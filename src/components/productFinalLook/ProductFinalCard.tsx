@@ -76,6 +76,7 @@ export const ProductFinalCard = () => {
         const checkIfProductInCart = async () => {
                 try {
                     if (cartData) {
+                      console.log("cartdata",cartData);
                         const productInCart = cartData.products.some((item: any) => item.id === product?.id);
                         setIsInCart(productInCart);
                     }
