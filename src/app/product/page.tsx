@@ -10,7 +10,8 @@ import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Product } from '@/components/Search';
 import Appbar from '@/components/Appbar';
-const ProductSuggestion = () => {
+
+export default function ProductSuggestion(){
     const searchParams = useSearchParams()
     const router = useRouter();
     const searchTerm = searchParams.get('searchTerm')
@@ -105,4 +106,4 @@ const ProductSuggestion = () => {
     );
 };
 
-export default ProductSuggestion;
+//export default ProductSuggestion;

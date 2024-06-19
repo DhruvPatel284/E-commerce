@@ -3,7 +3,7 @@ import Quote from "@/components/auth/Quote";
 import Signup from "@/components/auth/Signup";
 import { useState,useEffect } from "react";
 
-const signup = () => {
+export default function signup(){
 
   return (
     <div>
@@ -18,4 +18,4 @@ const signup = () => {
     </div>
   )
 }
-export default signup;
+//export default signup;

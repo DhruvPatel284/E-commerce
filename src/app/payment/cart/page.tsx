@@ -1,6 +1,6 @@
 import React from 'react'
 import PaymentCartPage from '@/components/payment/PaymentCartPage'
-const cartPayment = () => {
+export default function cartPayment(){
   return (
     <div>
         <PaymentCartPage/>
@@ -8,4 +8,4 @@ const cartPayment = () => {
   )
 }
 
-export default cartPayment;
+//export default cartPayment;

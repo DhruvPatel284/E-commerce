@@ -1,11 +1,11 @@
 import PaymentPage from "@/components/payment/PaymentPage";
 
 
-export const singlePayment = () => {
+export default function singlePayment(){
   return (
     <div>
       <PaymentPage/>
     </div>
   )
 }
-export default singlePayment;
+// export default singlePayment;

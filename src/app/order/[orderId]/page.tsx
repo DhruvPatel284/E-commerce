@@ -1,9 +1,9 @@
 import  OrderDetailsPage from "@/components/order/OrderDetailsPage";
 
 
-export const singleOrder = () => {
+export default function singleOrder () {
   return (
     <div><OrderDetailsPage/></div>
   )
 }
-export default singleOrder;
+//export default singleOrder;

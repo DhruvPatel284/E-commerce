@@ -1,6 +1,6 @@
 import React from 'react'
 import OrderPage from '@/components/order/OrderPage'
-const order = () => {
+export default function order(){
   return (
     <div>
       <OrderPage />
@@ -8,4 +8,4 @@ const order = () => {
   )
 }
 
-export default order
+//export default order

@@ -1,9 +1,9 @@
 import Appbar from "@/components/Appbar";
 import ProductFinalCard from "@/components/productFinalLook/ProductFinalCard";
 
-export const productId = () => {
+export default function productId() {
   return <div>
       <ProductFinalCard/>
   </div>
 }
-export default productId;
+//export default productId;
