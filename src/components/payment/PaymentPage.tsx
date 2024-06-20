@@ -43,6 +43,7 @@ export const PaymentPage = () => {
   const temp = searchParams.get('quantity');
   const quantity = Number(temp)
   const [ ProductQuantity , setProductQuantity ] = useState<number>(quantity);
+  const userData = useSelector((state : InitialState) => state.userData)
   const orderData = useSelector((state : InitialState ) => state.orders);
   const dispatch = useDispatch();
   const [ loading , setloading ] = useState<boolean>(true);
@@ -71,12 +72,12 @@ export const PaymentPage = () => {
   useEffect(() => {
     const FetchProduct = async () => {
       try{
-        const response = await isAuthenticated();
-        if (!response || response.status !== 200) {
+        if(!userData.id){
+          toast.error("user have login first");
           return;
         }
-        const userId = response.data.user.userId;
-        const res = await axios.get(`/api/user/Auth/getPersonalInfo/${userId}`);
+        
+        const res = await axios.get(`/api/user/Auth/getPersonalInfo/${userData.id}`);
 
         setUserInfo(res.data.user);
 

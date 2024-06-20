@@ -91,26 +91,37 @@ export const ProductFinalCard = () => {
     }, [product]);
 
     const handleAddToCart = async () => {
-        const response = await isAuthenticated();
-        if (!response || response.status !== 200) {
-            router.push(`/signin`)
-            toast.error("user have login first");
-            return;
+        // const response = await isAuthenticated();
+        // if (!response || response.status !== 200) {
+        //     router.push(`/signin`)
+        //     toast.error("user have login first");
+        //     return;
+        // }
+        // dispatch(setUserData({
+        //   username : response.data.user.username,
+        //   email: response.data.user.email,
+        //   id: response.data.user.id,
+        // }))
+        // const ruserData = response.data.user;
+
+        if(!userData.id){
+          router.push(`/signin`)
+          toast.error("user have login first");
+          return;
         }
-        dispatch(setUserData({
-          username : response.data.user.username,
-          email: response.data.user.email,
-          id: response.data.user.id,
-        }))
-        const ruserData = response.data.user;
 
         try {
-          const cartResponse = await axios.post(`/api/user/cart/get/${ruserData.userId}`);
+          //const cartResponse = await axios.post(`/api/user/cart/get/${ruserData.userId}`);
           const productWithQuantity = { ...product, quantity: 1 };
-          if (cartResponse.data !== "Cart not found") {
-            updateCartInDatabase(cartResponse.data,productWithQuantity);
+          // if (cartResponse.data !== "Cart not found") {
+          //   updateCartInDatabase(cartResponse.data,productWithQuantity);
+          // } else {
+          //   createCartInDatabase(ruserData.userId,productWithQuantity);
+          // }
+          if (cartData.id !== "") {
+            updateCartInDatabase(cartData,productWithQuantity);
           } else {
-            createCartInDatabase(ruserData.userId,productWithQuantity);
+            createCartInDatabase(userData.id,productWithQuantity);
           }
         } catch (error) {
           console.log("Error fetching cart data:", error);
@@ -133,7 +144,7 @@ export const ProductFinalCard = () => {
 
         } catch (error) {
           console.log(error);
-          alert("Something went wrong while creating the cart");
+          toast.error("Something went wrong while creating the cart");
         }
       };
     
@@ -149,6 +160,7 @@ export const ProductFinalCard = () => {
           router.push("/checkout");
 
         } catch (error) {
+          toast.error("Error updating cart!");
           console.log("Error updating cart!");
         }
       };
