@@ -302,7 +302,7 @@ export const PaymentPage = () => {
                 customerName={userInfo.username || ""}
                 product={product}
                 userId={userInfo.id}
-                ProductQuantity={quantity}
+                ProductQuantity={ProductQuantity}
                 phoneno={userInfo.phoneno}
                 orderData={orderData}
               />
