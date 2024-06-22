@@ -13,6 +13,15 @@ import { UserInfo } from "os";
 import { useDispatch,useSelector } from "react-redux";
 import { Cart, CartProduct, InitialState, Order } from "@/redux/types"
 import { setCartData, setOrderData } from "@/redux/actions";
+import StripePaymentForm from "../Stripe";
+
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import StripePaymentFormCart from "../StripeCart";
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
+);
 
 
 interface User {
@@ -55,7 +64,7 @@ const PaymentCartPage = () => {
             const res = await axios.get(`/api/user/Auth/getPersonalInfo/${userId}`);
             let amount:number = 0;
              const totalamount = cartData.products.map((product:CartProduct)=>{
-                amount += product.price;
+                amount += (product.price * product.quantity);
              })
              setTotalPrice(amount);
             setUserInfo(res.data.user);
@@ -131,7 +140,7 @@ const PaymentCartPage = () => {
                                     </div>
                                     <div className="col-span-3 xl:col-span-2 ml-5" >
                                         <div className="text-lg xl:text-xl mt-4 mr-4 text-red-700   font-bold hover:text-red-500 cursor-pointer">
-                                            Rs.{product.price}
+                                            Rs.  ₹{product.price} x {product.quantity}
                                         </div>
                                         <div className="mt-3">
                                             
@@ -216,6 +225,21 @@ const PaymentCartPage = () => {
                               </div>
                             </div>
                             <div className="flex justify-center">
+                            <div className="flex justify-center flex-col mt-10">
+          <div className="w-[400px] ml-auto mr-auto mt-5">
+            <Elements stripe={stripePromise}>
+              <StripePaymentFormCart
+                totalPrice={totalPrice}
+                phoneno={userInfo.phoneno}
+                customerName={userInfo.username}
+              />
+            </Elements>
+          </div>
+        <p className="my-5 text-center font-medium">
+          Note: For Testing Purpose Add Card No: 4242 4242 4242 4242 and rest
+          all details randomly.
+        </p>
+        </div>
                        <button onClick={PaymentOnClickHandler} className="bg-slate-800 h-[50px] w-[20%]  hover:bg-green-700 text-white font-bold py-2 px-4 border text-md md:text-xl border-black-500 rounded-md mt-16 ">
                         Complete Payment
                       </button> 
