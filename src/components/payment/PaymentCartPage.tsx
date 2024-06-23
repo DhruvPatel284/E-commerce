@@ -239,14 +239,8 @@ const PaymentCartPage = () => {
           Note: For Testing Purpose Add Card No: 4242 4242 4242 4242 and rest
           all details randomly.
         </p>
-        </div>
-                       <button onClick={PaymentOnClickHandler} className="bg-slate-800 h-[50px] w-[20%]  hover:bg-green-700 text-white font-bold py-2 px-4 border text-md md:text-xl border-black-500 rounded-md mt-16 ">
-                        Complete Payment
-                      </button> 
-                    </div>
-                    <div className="h-10">
-
-                    </div>
+      </div>
+      </div>
     </div>
   )
 }
