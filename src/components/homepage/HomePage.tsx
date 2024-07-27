@@ -1,15 +1,13 @@
-"use client"
 
-import HomepageImage from "./HomepageImage";
-import HomepageProductCard from "./HomepageProductCard";
+"use client"
 import HomePageLamp from "./HomePageLamp";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
 import CategorywiseProducts from "./CategorywiseProducts";
 import { number } from "zod";
-import CardContainer from "./MoveAbleCard";
 import Faqs from "../Faqs";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 
 interface Product {
   id: string;
@@ -42,7 +40,12 @@ const HomePage = () => {
 
   return (
     <div className="bg-slate-100 ">
-      <HomePageLamp >D-Kart</HomePageLamp>
+      <HomePageLamp className="flex ">
+        <div className="flex mb-16">
+          <div className="">D-kart</div>
+          <div><ShoppingCartIcon className="h-[50px] text-orange-400"/></div>
+        </div>
+      </HomePageLamp>
       <div>
       <div className="h-[100px]"></div>
       {data &&

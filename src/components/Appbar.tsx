@@ -1,4 +1,3 @@
-
 "use client"
 import { isAuthenticated } from "./productFinalLook/ProductFinalCard";
 import axios from "axios";
@@ -46,17 +45,16 @@ const Appbar = () => {
         }
         dispatch(setUserData(user));
 
-        const CartResponse = await axios.post(`api/user/cart/get/${response.data.user.userId}`);
-        
-        if(CartResponse.status == 205){
-          const temp:Cart={
-            id :"",
-            products:[]
-          }
-          dispatch(setCartData(temp));
-        }
-        else
+        const CartResponse = await axios.post(`/api/user/cart/get/${response.data.user.userId}`);
+        if( CartResponse.status == 404 ){
+          dispatch(setCartData({
+            id : "",
+            products : []
+          }));
+        }else{
           dispatch(setCartData(CartResponse.data));
+        }
+        
         
         if(userData.id){
           
@@ -152,15 +150,15 @@ const Appbar = () => {
     <header className="min-w-[1000px] h-[70px]">
       <div className="flex bg-slate-950 text-white h-[70px]">
         {/* Left */}
-        <div className="flex items-center m-4">
-          <Link href={"/"}>
+        <div className=" flex items-center m-4">
+          <Link href={"/"} >
             <img
-              className=" rounded-md h-[50px] w-[90px] m-2"
-              src={"../images/logo-ss.png"}
-              alt="Amazon logo"
+              className=" rounded-md max-h-[50px] max-w-[90px] m-2 ml-4"
+              src={"../images/logo1.jpg"}
+              alt="logo"
             />
           </Link>
-          <div className="pr-4 pl-2">
+          <div className="pr-4 ">
             <div className="text-sm xl:text-base font-bold">D-Kart</div>
           </div>
         </div>

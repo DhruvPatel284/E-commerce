@@ -41,7 +41,7 @@ const montserrat = Montserrat({ subsets: ["latin"] });
 
 
 export const metadata: Metadata = {
-  title: "D-Kart Website - Dhruv Patel",
+  title: "D-Kart - BY Dhruv Patel",
   description: "Buy the best product at cheaper rates",
 };
 

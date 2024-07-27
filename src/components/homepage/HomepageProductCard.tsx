@@ -9,7 +9,7 @@ export const HomepageProductCard  = ( { id , image , product_name ,price } :  {
 }   )  => {
   console.log(id)
   return (
-    <div className="m-2 ">
+    <div className="m-2 max-w-">
         <div className="group my-10 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border-2 border-gray-300 bg-white shadow-lg">
           <div className="relative mx-3 mt-3 h-60 overflow-hidden rounded-xl" >
             <div className="flex justify-center hover:scale-110 transition-all">
@@ -35,6 +35,5 @@ export const HomepageProductCard  = ( { id , image , product_name ,price } :  {
           </div>
         </div>
     </div>
-  )
-}
+  )}
 export default HomepageProductCard;
