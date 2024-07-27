@@ -1,5 +1,6 @@
 import React from 'react'
 import HomepageProductCard from './HomepageProductCard';
+import { useRouter } from 'next/navigation';
 
 interface Product {
   id: string;
@@ -20,6 +21,7 @@ const CategorywiseProducts = ({
     title : string;
     products : Product[];
   }) => {
+    const route = useRouter();
  
     const len = products ? products.length : 0;
     let maxlen = 1;
@@ -42,19 +44,21 @@ const CategorywiseProducts = ({
         <div className=''>
         
                 <div className="md:ml-4">
-                    <div className="grid grid-cols-2 md:grid-cols-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 ">
                       
                           {products &&
                               products.map((product: Product ) => { 
                                 console.log(product)                              
                                   return (
-                                    <HomepageProductCard
-                                      key={product.id}
-                                      id={product.id}
-                                      image = {product.image}
-                                      product_name={product.product_name}
-                                      price={product.price}
-                                    />
+                                    <div key={product.id} onClick={() => route.push(`/product/${product.id}`)} className="cursor-pointer">
+                                      <HomepageProductCard
+                                        key={product.id}
+                                        id={product.id}
+                                        image = {product.image}
+                                        product_name={product.product_name}
+                                        price={product.price}
+                                      />
+                                    </div>
                                   )
                               })}
                       

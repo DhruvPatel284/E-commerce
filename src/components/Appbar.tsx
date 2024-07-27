@@ -139,7 +139,7 @@ const Appbar = () => {
       return (
         <Link href={"/signin"}>
           <div className="pr-4 pl-4">
-            <div className="text-xs xl:text-xl font-bold">Login</div>
+            <div className="xl:text-xl font-bold">Login</div>
           </div>
         </Link>
       );
@@ -147,32 +147,33 @@ const Appbar = () => {
   };
 
   return (
-    <header className="min-w-[1000px] h-[70px]">
-      <div className="flex bg-slate-950 text-white h-[70px]">
+    <header className="w-full h-[70px]">
+      <div className="flex bg-slate-950 text-white h-full items-center">
         {/* Left */}
-        <div className=" flex items-center m-4">
-          <Link href={"/"} >
+        <div className="flex items-center flex-shrink-0 mx-2 md:mx-4 md:ml-4">
+          <Link href={"/"}>
             <img
-              className=" rounded-md max-h-[50px] max-w-[90px] m-2 ml-4"
+              className="rounded-md h-[40px] md:h-[50px] max-w-[90px] m-2"
               src={"../images/logo1.jpg"}
               alt="logo"
             />
           </Link>
-          <div className="pr-4 ">
-            <div className="text-sm xl:text-base font-bold">D-Kart</div>
+          <div className="pl-2">
+            <div className="sm:text-sm md:text-lg font-bold">D-Kart</div>
           </div>
         </div>
         {/* Middle */}
-        <div className="flex grow relative items-center">
+        <div className="flex-grow flex items-center mx-5">
           <Search />
         </div>
         {/* Right */}
-        <div className="flex items-center m-4">   
+        <div className="flex items-center mx-2 md:mx-4">
           {renderUserButton()}
         </div>
       </div>
-      
     </header>
+
+
   );
 };
 
