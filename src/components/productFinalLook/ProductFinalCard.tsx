@@ -166,91 +166,93 @@ export const ProductFinalCard = () => {
       };
     
         return (
-      <div >
+          <div >
         
-        <div className=" bg-slate-00">
-            {
-              !loading && product && (<div className=" mt- min-h-[590px]">
-                    <div className="min-w-[1000px] max-w-[1500px] bg-slate-100 p-4">
-                    <div className="grid grid-cols-10 gap-2 border-2 ">
-                        {/* Left */}
-                        <div className=" p-8 col-span-8 rounded bg-white  md:col-span-2">
-                            <img className="max-h-[350px] hover:scale-110 transition-all" src={product.image} alt="Main product" />
-                        </div>
-                        {/* Middle */}
-                        <div className="col-span-4 p-4 pl-8 rounded bg-white divide-y divide-gray-400 md:col-span-6">
-                        <div className="mb-3">
-                            <ProductDetails product_name={product.product_name} product_category={""}/>
-                        </div>
-                        <div className="text-base xl:text-lg mt-3">
-                            {product.product_description}
-                        </div>
-                        </div>
-                        {/* Right */}
-                        <div className="col-span-8 p-4 pl-8 rounded bg-white md:col-span-2">
-                            <div className="text-xl xl:text-2xl text-red-700 hover:text-red-500  font-semibold">
-                                Rs.{product.price}
-                            </div>
-                            <div className="text-sm xl:text-base text-blue-500 font-semibold mt-3">
-                                FREE Returns
-                            </div>
-                            <div className="text-sm xl:text-base text-blue-500 font-semibold mt-1">
-                                FREE Delivery
-                            </div>
-                            <div className="text-base xl:text-lg text-green-700 font-semibold mt-1">
-                                { product.stock || 0 > 0 ? "In Stock" : "Out of Stock"}
-                            </div>
-                            <div className="flex flex-col" >
-                                <div onClick={() => {
-                                  if( userData.id ){
-                                    router.push(`/payment/${product.id}?quantity=${1}`);
-                                  }
-                                  else{
-                                    router.push(`/signin`);
-                                    toast.error("user have to login first");
-                                  }
-                                }}   className="bg-black hover:bg-slate-700 text-white font-bold py-2 px-4 border border-black w-[50%] rounded-md mt-3">
-                                    Buy Now
-                                </div>
-                                <button
-                                        onClick={isInCart ? () => { router.push(`/checkout`) } : handleAddToCart}
-                                        className={`w-[50%] h-10 font-bold py-2 px-4 border rounded-md mt-3 ${isInCart ? 'bg-blue-500 hover:bg-blue-700' : 'bg-yellow-500 hover:bg-yellow-700'} text-white`}
-                                    >   <div className="flex ml-3 justify-center">
-                                            {isInCart ? "View" : "Add"} <ShoppingCartIcon className="ml-2 h-6 "/>
-                                        </div>
-                                        
-                                    </button>
-                            </div>
-                            </div>
-                    </div>
-                </div>
-            </div>
-            )}
-    
-           { loading && (<div>
-
-                <div className="bg-slate-100 min-h-[590px]">
-                <div className="min-w-[1000px] max-w-[1500px] h-[450px] p-4">
-                    <div className="grid grid-cols-10 gap-2 border-2">
-                        {/* Left */}
-                      
-                            <Skeleton className="col-span-2 w-[250px] p-4 rounded  m-auto h-[400px]"/>
+          <div className="">
+              {
+                 !loading && product && <div className="bg-slate-100 min-h-[590px]">
+                 <div className="min-w-full max-w-[1500px] bg-slate-100 p-4 mx-auto">
+                   <div className="grid grid-cols-1 md:grid-cols-10 gap-2 border-2">
+                     {/* Left */}
+                     <div className="p-8 col-span-1 md:col-span-2 rounded bg-white">
+                       <img className="max-h-[350px] hover:scale-110 transition-all mx-auto" src={product.image} alt="Main product" />
+                     </div>
+                     {/* Middle */}
+                     <div className="col-span-1 md:col-span-6 p-4 pl-8 rounded bg-white divide-y divide-gray-400">
+                       <div className="mb-3">
+                         <ProductDetails product_name={product.product_name} product_category={""} />
+                       </div>
+                       <div className="text-base xl:text-lg mt-3">
+                         {product.product_description}
+                       </div>
+                     </div>
+                     {/* Right */}
+                     <div className="col-span-1 md:col-span-2 p-4 pl-8 rounded bg-white">
+                       <div className="text-xl xl:text-2xl text-red-700 hover:text-red-500 font-semibold">
+                         Rs.{product.price}
+                       </div>
+                       <div className="text-sm xl:text-base text-blue-500 font-semibold mt-3">
+                         FREE Returns
+                       </div>
+                       <div className="text-sm xl:text-base text-blue-500 font-semibold mt-1">
+                         FREE Delivery
+                       </div>
+                       <div className="text-base xl:text-lg text-green-700 font-semibold mt-1">
+                         {product.stock > 0 ? "In Stock" : "Out of Stock"}
+                       </div>
+                       <div className="flex flex-col items-center md:items-start">
+                         <div 
+                           onClick={() => {
+                             if (userData.id) {
+                               router.push(`/payment/${product.id}?quantity=${1}`);
+                             } else {
+                               router.push(`/signin`);
+                               toast.error("user have to login first");
+                             }
+                           }} 
+                           className="bg-black hover:bg-slate-700 text-white font-bold py-2 px-4 border border-black rounded-md mt-3 text-center max-w-full md:max-w-[320px] cursor-pointer"
+                         >
+                           Buy Now
+                         </div>
+                         <button
+                           onClick={isInCart ? () => { router.push(`/checkout`) } : handleAddToCart}
+                           className={`w-full md:w-[120px] h-10 font-bold py-2 px-4 border rounded-md mt-3 ${isInCart ? 'bg-blue-500 hover:bg-blue-700' : 'bg-yellow-500 hover:bg-yellow-700'} text-white`}
+                         >
+                           <div className="flex justify-center">
+                             {isInCart ? "View" : "Add"} <ShoppingCartIcon className="ml-2 h-6" />
+                           </div>
+                         </button>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+              }
+      
+             { loading && (<div>
+  
+                  <div className="bg-slate-100 min-h-[590px]">
+                  <div className="min-w-[1000px] max-w-[1500px] h-[450px] p-4">
+                      <div className="grid grid-cols-10 gap-2 border-2">
+                          {/* Left */}
                         
-                      
-                             <Skeleton className="col-span-6 p-4 h-[400px] rounded  divide-y "/>
-                      
-                        {/* Right */}
-                     
-                            <Skeleton className="col-span-2 p-4 h-[400px] rounded"/>
+                              <Skeleton className="col-span-2 w-[250px] p-4 rounded  m-auto h-[400px]"/>
+                          
                         
-    
-                        </div>
-                    </div>
-                </div>
-            </div>
-           )}
+                               <Skeleton className="col-span-6 p-4 h-[400px] rounded  divide-y "/>
+                        
+                          {/* Right */}
+                       
+                              <Skeleton className="col-span-2 p-4 h-[400px] rounded"/>
+                          
+      
+                          </div>
+                      </div>
+                  </div>
+              </div>
+             )}
+          </div>
         </div>
-      </div>
     )
 }
 export default ProductFinalCard;
