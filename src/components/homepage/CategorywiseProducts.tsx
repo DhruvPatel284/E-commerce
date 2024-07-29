@@ -1,6 +1,7 @@
 import React from 'react'
 import HomepageProductCard from './HomepageProductCard';
 import { useRouter } from 'next/navigation';
+import { Duru_Sans } from 'next/font/google';
 
 interface Product {
   id: string;
@@ -96,3 +97,5 @@ export default CategorywiseProducts;
 //   )
 // }
 // export default CategorywiseProducts;
+
+
