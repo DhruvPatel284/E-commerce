@@ -13,11 +13,28 @@ export const Signin = () =>{
     })
     async function sendRequest(){
         try{
+            console.log(inputs)
             const response = await axios.post("api/user/Auth/signin", inputs);
             const token =  response.data;
             //console.log(response.data);
             navigate.push("/");
             toast.success("signed in successfully");
+        }catch(e){
+            toast.error("Login Failed");
+        }
+    }
+    async function sendGuestReq(){
+        setInputs({
+            email : "dhruv@gmail.com",
+            password : "123456"
+        })
+        try{
+                const response = await axios.post("api/user/Auth/signin", inputs);
+                const token =  response.data;
+                //console.log(response.data);
+                navigate.push("/");
+                toast.success("signed in successfully");          
+            
         }catch(e){
             toast.error("Login Failed");
         }
@@ -66,7 +83,12 @@ export const Signin = () =>{
                         <button onClick={sendRequest} type="button" className="mt-8 w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 
                         focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700
                          dark:focus:ring-gray-700 dark:border-gray-700">Login</button>
-
+                        
+                         <div className="text-center mt-4">for recruiters </div>
+                    <button onClick={sendGuestReq} type="button" className="w-full text-white bg-blue-500 hover:bg-gray-700 focus:outline-none 
+                        focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-500 dark:hover:bg-gray-500 
+                        dark:focus:ring-gray-500 dark:border-gray-500">Login as Guest</button>
+                        
                 </div>
               </div>
          </div>
