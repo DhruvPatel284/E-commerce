@@ -36,11 +36,12 @@ D-kart is a full-featured ecommerce website where users can browse products, add
 
 ## Technologies Used
 
-- **Frontend**: React, Next.js, Tailwind CSS
-- **Backend**: Node.js, Express, Prisma ORM
+- **Frontend and Backend**: Next.js (Fullstack)
 - **Database**: PostgreSQL
+- **ORM**: Prisma
 - **Payment Gateway**: Stripe
-- **Deployment**: Vercel (Frontend), Cloudflare Workers (Backend)
+- **Styling**: Tailwind CSS
+- **Deployment**: Vercel (both frontend and backend)
 
 ---
 
