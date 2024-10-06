@@ -1,31 +1,25 @@
 # D-kart: Ecommerce Website
----
-## Table of Contents
-1. [Project Overview](#project-overview)
-2. [Video Demo](#video-demo)
-3. [Features](#features)
-4. [Technologies Used](#technologies-used)
-5. [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-6.  [Usage](#usage)
-7. [Contributing](#contributing)
-
-
----
-
-## Project Overview
-
 D-kart is a full-featured ecommerce website where users can browse products, add items to their cart, and securely purchase them using Stripe for payment processing. The project focuses on delivering a smooth shopping experience with features like user authentication, real-time cart updates, and seamless payment integration.
 
 ---
-## Video Demo
+## 📚 Table of Contents
+1. [Project Demo](#video-demo)
+2. [Features](#features)
+3. [Technologies Used](#technologies-used)
+4. [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+5.  [Usage](#usage)
+6. [Contributing](#contributing)
+
+---
+## 🎥 Project Demo
 
 [![D-kart Demo](your_video_link)](your_video_link)
 
 ---
 
-## Features
+## **📝 Features in Details**
 - **User Authentication**: Secure login and signup using cookies and JWT for session management.
 - **Product Browsing**: Browse, search, and filter products without requiring login.
 - **Cart Management**: Add products to cart, update quantities, and remove items as needed.
@@ -34,7 +28,7 @@ D-kart is a full-featured ecommerce website where users can browse products, add
 
 ---
 
-## Technologies Used
+## 🛠️ Technologies Used
 
 - **Frontend and Backend**: Next.js (Fullstack)
 - **Database**: PostgreSQL
@@ -45,7 +39,7 @@ D-kart is a full-featured ecommerce website where users can browse products, add
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
 Follow these instructions to set up the project locally.
 
@@ -86,7 +80,7 @@ Before you begin, ensure you have met the following requirements:
 
 ---
 
-### Usage
+### 📋Usage
 
 Once the app is running, you can perform the following actions:
 - **Sign up** or **Log in** as a user.
@@ -96,7 +90,12 @@ Once the app is running, you can perform the following actions:
 
 ---
 
+### 🌐 Deployment
+#### Frontend and Backend (Vercel):
+     1. Deploy to Vercel.
+     2. Set JWT_SECRET , DATABASE_URL , and STRIPE_SECRET_KEY in Environment Variables
 
-### Contributing
+---
 
+### **🤝 Contributing**:
 Contributions are always welcome! Please feel free to submit a pull request or open an issue if you find any bugs or want to enhance the features.
