@@ -9,8 +9,9 @@ D-kart is a full-featured ecommerce website where users can browse products, add
 4. [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
-5.  [Usage](#usage)
-6. [Contributing](#contributing)
+5. [Deployment](#-deployment)
+6. [Usage](#usage)
+7. [Contributing](#contributing)
 
 ---
 ## 🎥 Project Demo
