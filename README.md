@@ -40,7 +40,7 @@ D-kart is a full-featured ecommerce website where users can browse products, add
 - **Database**: PostgreSQL
 - **ORM**: Prisma
 - **Payment Gateway**: Stripe
-- **Styling**: Tailwind CSS
+- **Styling**: Tailwind CSS , Shadcn ui
 - **Deployment**: Vercel (both frontend and backend)
 
 ---
