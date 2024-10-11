@@ -11,13 +11,18 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   // Define the paths where you don't want to show the Appbar
   const noAppbarPaths = ["/signup", "/signin"];
+  const noFooterPaths = ["/signup", "/signin", "/"];
 
   return (
     <Providers>
-      {!noAppbarPaths.includes(pathname) && <Appbar />}
-      {children}
-      {!noAppbarPaths.includes(pathname) && <Footer />}
-      <Toaster position="bottom-right" />
+      <div className="flex flex-col min-h-screen">
+        {!noAppbarPaths.includes(pathname) && <Appbar />}
+        <main className="flex-grow">
+          {children}
+        </main>
+        {!noFooterPaths.includes(pathname) && <Footer />}
+        <Toaster position="bottom-right" />
+      </div>
     </Providers>
   );
 }
