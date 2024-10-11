@@ -292,3 +292,4 @@ export const CheckOutPage =  () => {
     }
 }
 export default CheckOutPage;
+
