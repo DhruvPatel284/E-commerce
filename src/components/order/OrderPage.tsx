@@ -403,7 +403,7 @@ const OrderPage = () => {
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
         <ShoppingBag className="w-24 h-24 text-gray-400 mb-4" />
         <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-4 text-center">No Orders Yet</h2>
-        <p className="text-gray-600 mb-8 text-center max-w-md">Looks like you haven't placed any orders. Start shopping to see your orders here!</p>
+        <p className="text-gray-600 mb-8 text-center max-w-md">Looks like you haven&apos;t placed any orders. Start shopping to see your orders here!</p>
         <button
           onClick={() => router.push('/')}
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300"
