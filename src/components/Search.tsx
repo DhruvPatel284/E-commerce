@@ -48,7 +48,7 @@ const Search = () => {
       }, [searchTerm]);
 
   return(
-    <div className="w-full md:w-[900px] ml-4 md:ml-16">
+    <div className="w-full md:w-2/3 ">
         <div className="flex">
             <div className="relative w-full">
             <input 
@@ -63,10 +63,11 @@ const Search = () => {
             <button 
                 type="submit" 
                 onClick={handleSearch} 
-                className="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-blue-500 rounded-r-lg hover:bg-blue-700"
+                className="absolute top-0 right-0  text-sm md:font-medium h-full text-white bg-blue-500 rounded-r-lg hover:bg-blue-700 sm:p-1  md:p-2.5 "
             >
-                <MagnifyingGlassIcon className="h-[27px] m-auto stroke-slate-900" />
+                <MagnifyingGlassIcon className="h-[27px] m-auto stroke-slate-900 md:h-[20px]" />
             </button>
+
             {suggestions && (
                 <div className="bg-slate-200 rounded-lg text-black  w-full z-40 absolute mt-1">
                 {suggestions

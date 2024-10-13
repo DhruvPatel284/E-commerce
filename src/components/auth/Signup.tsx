@@ -8,9 +8,6 @@ import { sendResponse } from "next/dist/server/image-optimizer";
 import { SignupInput } from "@/schemas/signupInput"
 import { toast, Toaster } from "react-hot-toast"; 
 
-
-
-
 export const Signup = () =>{
     const navigate = useRouter();
     const [ inputs , setInputs ] = useState<{username ?: string , email : string , password : string}>({

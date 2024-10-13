@@ -1,248 +1,219 @@
-
-"use client"
+"use client";
 import axios from "axios";
-import { Activity, ActivityIcon, ActivitySquareIcon } from "lucide-react";
-import Link from "next/link";
-import { useParams,useSearchParams } from "next/navigation";
+import { ActivitySquareIcon, CreditCard, ShoppingBag, User, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { isAuthenticated } from "../productFinalLook/ProductFinalCard";
-import { Skeleton } from "../ui/skeleton";
-import toast from "react-hot-toast";
-import { UserInfo } from "os";
-import { useDispatch,useSelector } from "react-redux";
-import { Cart, CartProduct, InitialState, Order } from "@/redux/types"
-import { setCartData, setOrderData } from "@/redux/actions";
-import StripePaymentForm from "../Stripe";
-
-import { Elements } from "@stripe/react-stripe-js";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-hot-toast";
 import { loadStripe } from "@stripe/stripe-js";
-import StripePaymentFormCart from "../StripeCart";
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { setCartData } from "@/redux/actions";
+import { CartProduct, InitialState } from "@/redux/types";
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
-);
-
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
 
 interface User {
-    id : string;
-    email : string;
-    phoneno ?: string;
-    username ?: string;
-    address?: string;   
-    pincode?: number;   
-    state?: string;     
-    city?: string;      
-    country?: string;
-  }
-const PaymentCartPage = () => {
-    const userData = useSelector((state : InitialState) => state.userData);
-    const cartData = useSelector((state : InitialState ) => state.cart);
-    const [ loading , setloading ] = useState<boolean>(true);
-    const route = useRouter();
-    const [totalPrice,setTotalPrice] = useState<number>(0);
-    let amount:number = 0;
-    const dispatch = useDispatch();
-
-    const [userInfo, setUserInfo] = useState<User>({
-        id : "",
-        email : "",
-        phoneno : "",
-        username : "",
-        address : "",   
-        pincode: 0,   
-        state: "",     
-        city: "",      
-        country: "",
-      });
-    
-      useEffect(() => {
-        const FetchProduct = async () => {
-          try{
-        
-            const userId = userData.id;
-            const res = await axios.get(`/api/user/Auth/getPersonalInfo/${userId}`);
-            let amount:number = 0;
-             const totalamount = cartData.products.map((product:CartProduct)=>{
-                amount += (product.price * product.quantity);
-             })
-             setTotalPrice(amount);
-            setUserInfo(res.data.user);
-            setloading(false);
-          }
-          catch(e){
-    
-          }
-        }
-        FetchProduct();
-      }, [])
-      const PaymentOnClickHandler = async () => {
-        try{
-            if ( !userInfo.phoneno ) {
-              toast.error("please fill all details")
-              route.push("/profile");
-            }
-            else{
-              const total = totalPrice;
-              const response = await axios.post(`/api/user/order/addOrder`,{
-                userId:userInfo.id,
-                products:cartData.products,
-                total:total,
-              })
-              const res = await axios.post(`/api/user/cart/clear/${cartData.id}`);
-              dispatch(setCartData({ products: [], id: "" }));
-              toast.success("product orderd successfully!!");
-              route.push("/order")
-            }  
-          }
-          catch(e){
-            toast.error("product order failed!!");
-          }
-      }
-
-  return (
-    <div>
-         <div className=" text-slate-800 text-xl md:text-3xl font-bold flex items-center justify-center mt-6">
-                        <ActivitySquareIcon className="mr-2"/>Make Payment
-         </div>
-       {!loading &&
-        cartData.products && cartData.products.map((product:CartProduct)=>{
-            return (
-                <div key={product.id}>
-                    <div>
-                      <div>
-                        <div className="mt-10 w-[1000px] ml-[15%]" key={product.id}>
-                          <div className="h-[0.1px] bg-slate-800" />
-                                <div className="grid grid-cols-12 max-h-[250px]">
-                                    <div className="col-span-10 grid grid-cols-8 divide-y divide-gray-400">
-                                    <div className="col-span-4 xl:col-span-2 ">
-                                        <Link href={`/`}>
-                                            <img
-                                                className="p-4 flex justify-center m-auto h-[200px] hover:scale-110 transition-all"
-                                                src={product.image}
-                                                alt="Checkout product"
-                                            />
-                                        </Link>
-                                    </div>
-                                    <div className="col-span-7 xl:col-span-6 flex">
-                                        <div className="font-medium text-black ml-10 mt-2">
-                                            <div className="">
-                                                <div className="text-xl xl:text-2xl  font-semibold text-blue-900">
-                                                    {product.product_name}
-                                                </div>
-                                                <div className=" mt-3 text-md overflow-hidden h-[190px]">
-                                                    {product.product_description}
-                                                </div>
-                                                
-                                            </div>
-                                        </div>    
-                                    </div>
-                                    </div>
-                                    <div className="col-span-3 xl:col-span-2 ml-5" >
-                                        <div className="text-lg xl:text-xl mt-4 mr-4 text-red-700   font-bold hover:text-red-500 cursor-pointer">
-                                            Rs.  ₹{product.price} x {product.quantity}
-                                        </div>
-                                        <div className="mt-3">
-                                            
-                                
-                                        </div>
-                                    </div>
-                                </div>
-                              </div>
-                           
-                      </div>
-                    </div>
-                 
-                    <div className="h-[60px]" />
-                </div>
-              )
-        })
-       }
-        <div className="w-[1000px] ml-[15%]">
-                              <div className="bg-black mt-5 h-[1px]  flex justify-center"></div>
-                              <div className="mt-2 flex text-xl font-semibold justify-end  ">
-                                Total price :- <div className="text-red-700 ml-5">  Rs. {totalPrice} </div>
-                              </div>
-                              
-                              <div>
-                                <div className=" flex flex-col  mt-[70px]">
-                                  <div className="font-bold text-slate-800 items-center flex justify-center text-xl md:text-3xl">
-                                        <ActivitySquareIcon className="mr-2"/>
-                                        Check Informations
-                                  </div>
-                                  <div className="flex mt-[70px] text-blue-700 text-md md:text-2xl font-semibold">
-                                    <div className="">
-                                      Personal details
-                                    </div>
-                                    <Link href={`/profile`} className="ml-[70%]">                  
-                                        Edit
-                                    </Link>
-                                  </div> 
-                                  <div className="h-[0.1px] bg-slate-800" />
-                                  <div className="mt-3 text-xl font-semibold">
-                                    <div className="">
-                                      Name : {userInfo?.username}
-                                    </div>
-                                    <div className="">
-                                      Email : {userInfo?.email}
-                                    </div>
-                                    <div className="">
-                                     phone No. : {userInfo?.phoneno}
-                                    </div>
-                                  </div>
-                                  <div className="flex text-blue-700 text-md md:text-2xl font-semibold mt-5">
-                                    <div className="">
-                                      Location details
-                                    </div>
-                                    <Link href={`/profile`} className="ml-[70%]">                  
-                                        Edit
-                                    </Link>
-                                  </div>
-                                  <div className="h-[0.1px] bg-slate-800" />
-                                  <div className="mt-3 text-xl font-semibold">
-                                    <div className="">
-                                      Country : {userInfo?.country}
-                                    </div>
-                                    <div className="flex">
-                                      <div>
-                                        Address :
-                                      </div> 
-                                      <div className="ml-1">
-                                       {userInfo?.address}
-                                      </div>
-                                    </div>
-                                    <div className="">
-                                      State : {userInfo?.state}
-                                    </div>
-                                    <div className="">
-                                     City : {userInfo?.city}
-                                    </div>
-                                    <div className="">
-                                     pincode : {userInfo?.pincode}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex justify-center">
-                            <div className="flex justify-center flex-col mt-10">
-          <div className="w-[400px] ml-auto mr-auto mt-5">
-            <Elements stripe={stripePromise}>
-              <StripePaymentFormCart
-                totalPrice={totalPrice}
-                phoneno={userInfo.phoneno}
-                customerName={userInfo.username}
-              />
-            </Elements>
-          </div>
-        <p className="my-5 text-center font-medium">
-          Note: For Testing Purpose Add Card No: 4242 4242 4242 4242 and rest
-          all details randomly.
-        </p>
-      </div>
-      </div>
-    </div>
-  )
+  id: string;
+  email: string;
+  phoneno?: string;
+  username?: string;
+  address?: string;
+  pincode?: number;
+  state?: string;
+  city?: string;
+  country?: string;
 }
 
-export default PaymentCartPage
+const PaymentCartPage = () => {
+  const userData = useSelector((state: InitialState) => state.userData);
+  const cartData = useSelector((state: InitialState) => state.cart);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [userInfo, setUserInfo] = useState<User>({
+    id: "",
+    email: "",
+    phoneno: "",
+    username: "",
+    address: "",
+    pincode: 0,
+    state: "",
+    city: "",
+    country: "",
+  });
+
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userId = userData.id;
+        const res = await axios.get(`/api/user/Auth/getPersonalInfo/${userId}`);
+        setUserInfo(res.data.user);
+
+        const totalAmount = cartData.products.reduce((acc: number, product: CartProduct) => {
+          return acc + product.price * product.quantity;
+        }, 0);
+
+        setTotalPrice(totalAmount);
+        setLoading(false);
+      } catch (error) {
+        toast.error("Failed to fetch user data.");
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [userData.id, cartData.products]);
+
+  const handlePayment = async () => {
+    if (!userInfo.phoneno) {
+      toast.error("Please fill all details.");
+      router.push("/profile");
+      return;
+    }
+
+    try {
+      const response = await axios.post(`/api/user/order/addOrder`, {
+        userId: userInfo.id,
+        products: cartData.products,
+        total: totalPrice,
+      });
+
+      await axios.post(`/api/user/cart/clear/${cartData.id}`);
+      dispatch(setCartData({ products: [], id: "" }));
+      toast.success("Product ordered successfully!");
+      router.push("/order");
+    } catch (error) {
+      toast.error("Product order failed.");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-200 py-12">
+      <div className="container mx-auto px-4">
+        <h1 className="text-4xl font-bold text-center mb-12 text-slate-800">
+          <ActivitySquareIcon className="inline-block mr-3 mb-1" />
+          Complete Your Purchase
+        </h1>
+
+        <div className="grid gap-8 md:grid-cols-2">
+          <Card className="shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-slate-700 to-slate-800 text-white">
+              <CardTitle className="flex items-center text-2xl">
+                <ShoppingBag className="mr-2" />
+                Product Details
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              {!loading &&
+                cartData.products.map((product: CartProduct) => (
+                  <div key={product.product_name} className="flex items-center space-x-6">
+                    <img
+                      src={product.image}
+                      alt={product.product_name}
+                      className="w-32 h-32 object-cover rounded-lg shadow-md"
+                    />
+                    <div>
+                      <h3 className="font-semibold text-xl text-slate-800 mb-2">
+                        {product.product_name}
+                      </h3>
+                      <p className="text-slate-600 mb-4">{product.product_description}</p>
+                    </div>
+                  </div>
+                ))}
+            </CardContent>
+            <CardFooter className="bg-slate-50">
+              <div className="w-full flex justify-between items-center">
+                <span className="text-lg font-semibold text-slate-700">Total:</span>
+                <span className="text-3xl font-bold text-slate-800">₹{totalPrice}</span>
+              </div>
+            </CardFooter>
+          </Card>
+
+          <Card className="shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-slate-800 to-slate-700 text-white">
+              <CardTitle className="flex items-center text-2xl">
+                <User className="mr-2" />
+                Your Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-semibold text-lg text-slate-800 mb-2">
+                    <User className="mr-2 text-slate-600" /> Personal Details
+                  </h3>
+                  <p className="text-slate-600">
+                    <span className="font-medium">Name:</span> {userInfo.username}
+                  </p>
+                  <p className="text-slate-600">
+                    <span className="font-medium">Email:</span> {userInfo.email}
+                  </p>
+                  <p className="text-slate-600">
+                    <span className="font-medium">Phone:</span> {userInfo.phoneno}
+                  </p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg text-slate-800 mb-2">
+                    <MapPin className="mr-2 text-slate-600" /> Shipping Address
+                  </h3>
+                  <p className="text-slate-600">{userInfo.address}</p>
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter className="bg-slate-50">
+              <Button variant="outline" className="w-full text-slate-800 border-slate-300 hover:bg-slate-100">
+                Edit Information
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+
+        <Card className="mt-8 shadow-2xl">
+          <CardHeader className="bg-gradient-to-r from-slate-800 to-slate-700 text-white">
+            <CardTitle className="text-2xl flex items-center">
+              <CreditCard className="mr-2" />
+              Secure Payment
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2">
+                  <label htmlFor="card-number" className="block text-sm font-medium text-slate-700 mb-1">
+                    Card Number
+                  </label>
+                  <input type="text" id="card-number" placeholder="1234 5678 9012 3456" className="w-full p-2 border rounded" />
+                </div>
+                <div>
+                  <label htmlFor="expiry" className="block text-sm font-medium text-slate-700 mb-1">
+                    Expiry Date
+                  </label>
+                  <input type="text" id="expiry" placeholder="MM/YY" className="w-full p-2 border rounded" />
+                </div>
+                <div>
+                  <label htmlFor="cvc" className="block text-sm font-medium text-slate-700 mb-1">
+                    CVC
+                  </label>
+                  <input type="text" id="cvc" placeholder="123" className="w-full p-2 border rounded" />
+                </div>
+              </div>
+              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={handlePayment}>
+                Pay Now
+              </Button>
+            </div>
+          </CardContent>
+          <CardFooter className="bg-slate-50">
+            <p className="text-sm text-slate-500 text-center w-full">
+              For testing, use card number: 4242 4242 4242 4242 with any future expiry date and CVC.
+            </p>
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default PaymentCartPage;

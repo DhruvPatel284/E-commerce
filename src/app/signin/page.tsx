@@ -3,7 +3,6 @@
 import Quote from "@/components/auth/Quote";
 import Signin from "@/components/auth/Signin";
 
-
 export default function signin(){
   return (
     <div>

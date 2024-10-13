@@ -1,258 +1,233 @@
-"use client"
-import Appbar from "../Appbar";
-import Link from "next/link";
-import ProductDetails from "./ProductDetails";
-import { Button } from "../ui/Button";
-import { useParams } from "next/navigation";
+"use client";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Skeleton } from "../ui/skeleton";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
-import { NextResponse } from "next/server";
-// import { getCookie, setCookies } from 'cookies-next'
 import { useDispatch, useSelector } from "react-redux";
-import { setCartData, setOrderData, setUserData } from "@/redux/actions";
-import { Cart, CartProduct, InitialState, Order } from "@/redux/types"
-import { stat } from "fs";
-import { useRouter } from "next/navigation";
+import { setCartData } from "@/redux/actions";
+import { Cart, CartProduct, InitialState } from "@/redux/types";
+import { ShoppingCart, Heart, ArrowLeft } from "lucide-react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 import toast from "react-hot-toast";
-// import { GB_CURRENCY } from "../utils/constants";
-// import { callAPI } from "../utils/CallApi";
-// import { addToCart } from "../redux/cartSlice";
-
-interface Product {
-    product_name: string;
-    product_description: string;
-    price: number;
-    image: string;
-    id: string;
-    category: string;
-    stock : number;
-    quantity?: number;
+import Image from "next/image";
+export const isAuthenticated = async () => {
+  try{
+      console.log("Is Authenticated")
+      const response = await axios.get("/api/user/Auth/getUser");
+      return response;
   }
-
-  export const isAuthenticated = async () => {
-    try{
-        console.log("Is Authenticated")
-        const response = await axios.get("/api/user/Auth/getUser");
-        return response;
-    }
-    catch(e){
-        console.log(e);
-        return ;     
-    }
+  catch(e){
+      console.log(e);
+      return ;     
   }
-export const ProductFinalCard = () => {
-    const params = useParams();
-    const dispatch = useDispatch();
-    const cartData = useSelector((state : InitialState ) => state.cart)
-    const userData = useSelector((state : InitialState) => state.userData)
-    const [product , setProduct] = useState< Product | null >(null);
-    const [loading , setloading] = useState(true);
-    const [isInCart, setIsInCart] = useState(false);
-    const router = useRouter();
-    useEffect(() => {
-        const ProductData = async () => {
-            try{
-                console.log("userData",userData);
-                const response = await axios.post(`/api/user/product/getProduct/[productId]`,
-                {
-                    "productId" : params.productId
-                })
-                 setProduct(response.data);
-                 setloading(false);    
-            }catch(e){
-                setProduct(null);
-                setloading(false)
-            }
-        };
-        if(loading){
-            ProductData();
-        }
-    },[]);
-
-    useEffect(() => {
-
-        const checkIfProductInCart = async () => {
-                try {
-                    if (cartData) {
-                      console.log("cartdata",cartData);
-                        const productInCart = cartData.products.some((item: any) => item.id === product?.id);
-                        setIsInCart(productInCart);
-                    }
-                } catch (error) {
-                    console.log("Error fetching cart data:", error);
-                }
-            }
-        
-        if(product) {
-            checkIfProductInCart();
-        }
-    }, [product]);
-
-    const handleAddToCart = async () => {
-        // const response = await isAuthenticated();
-        // if (!response || response.status !== 200) {
-        //     router.push(`/signin`)
-        //     toast.error("user have login first");
-        //     return;
-        // }
-        // dispatch(setUserData({
-        //   username : response.data.user.username,
-        //   email: response.data.user.email,
-        //   id: response.data.user.id,
-        // }))
-        // const ruserData = response.data.user;
-
-        if(!userData.id){
-          router.push(`/signin`)
-          toast.error("user have login first");
-          return;
-        }
-
-        try {
-          //const cartResponse = await axios.post(`/api/user/cart/get/${ruserData.userId}`);
-          const productWithQuantity = { ...product, quantity: 1 };
-          // if (cartResponse.data !== "Cart not found") {
-          //   updateCartInDatabase(cartResponse.data,productWithQuantity);
-          // } else {
-          //   createCartInDatabase(ruserData.userId,productWithQuantity);
-          // }
-          if (cartData.id !== "") {
-            updateCartInDatabase(cartData,productWithQuantity);
-          } else {
-            createCartInDatabase(userData.id,productWithQuantity);
-          }
-        } catch (error) {
-          console.log("Error fetching cart data:", error);
-        }
-        
-    };
-    
-    const createCartInDatabase = async (ruserId:string,sendData: any) => {
-        try {
-
-          const { data } = await axios.post("/api/user/cart/create", {
-            products: [sendData],
-            userId: ruserId,
-          });
-          dispatch(setCartData({
-            products: [sendData],
-            id: data.id,
-          }));
-          router.push("/checkout");
-
-        } catch (error) {
-          console.log(error);
-          toast.error("Something went wrong while creating the cart");
-        }
-      };
-    
-      const updateCartInDatabase = async (respcartData: Cart, sendData: any) => {
-        try {
-          const cartId = respcartData.id;
-          const updatedCartData = {
-            id: cartId,
-            products: [...respcartData.products, sendData]
-          };
-          await axios.post(`/api/user/cart/update/${cartId}`, updatedCartData);
-          dispatch(setCartData(updatedCartData));
-          router.push("/checkout");
-
-        } catch (error) {
-          toast.error("Error updating cart!");
-          console.log("Error updating cart!");
-        }
-      };
-    
-        return (
-          <div >
-        
-          <div className="">
-              {
-                 !loading && product && <div className="bg-slate-100 min-h-[590px]">
-                 <div className="min-w-full max-w-[1500px] bg-slate-100 p-4 mx-auto">
-                   <div className="grid grid-cols-1 md:grid-cols-10 gap-2 border-2">
-                     {/* Left */}
-                     <div className="p-8 col-span-1 md:col-span-2 rounded bg-white">
-                       <img className="max-h-[350px] hover:scale-110 transition-all mx-auto" src={product.image} alt="Main product" />
-                     </div>
-                     {/* Middle */}
-                     <div className="col-span-1 md:col-span-6 p-4 pl-8 rounded bg-white divide-y divide-gray-400">
-                       <div className="mb-3">
-                         <ProductDetails product_name={product.product_name} product_category={""} />
-                       </div>
-                       <div className="text-base xl:text-lg mt-3">
-                         {product.product_description}
-                       </div>
-                     </div>
-                     {/* Right */}
-                     <div className="col-span-1 md:col-span-2 p-4 pl-8 rounded bg-white">
-                       <div className="text-xl xl:text-2xl text-red-700 hover:text-red-500 font-semibold">
-                         Rs.{product.price}
-                       </div>
-                       <div className="text-sm xl:text-base text-blue-500 font-semibold mt-3">
-                         FREE Returns
-                       </div>
-                       <div className="text-sm xl:text-base text-blue-500 font-semibold mt-1">
-                         FREE Delivery
-                       </div>
-                       <div className="text-base xl:text-lg text-green-700 font-semibold mt-1">
-                         {product.stock > 0 ? "In Stock" : "Out of Stock"}
-                       </div>
-                       <div className="flex flex-col items-center md:items-start">
-                         <div 
-                           onClick={() => {
-                             if (userData.id) {
-                               router.push(`/payment/${product.id}?quantity=${1}`);
-                             } else {
-                               router.push(`/signin`);
-                               toast.error("user have to login first");
-                             }
-                           }} 
-                           className="bg-black hover:bg-slate-700 text-white font-bold py-2 px-4 border border-black rounded-md mt-3 text-center max-w-full md:max-w-[320px] cursor-pointer"
-                         >
-                           Buy Now
-                         </div>
-                         <button
-                           onClick={isInCart ? () => { router.push(`/checkout`) } : handleAddToCart}
-                           className={`w-full md:w-[120px] h-10 font-bold py-2 px-4 border rounded-md mt-3 ${isInCart ? 'bg-blue-500 hover:bg-blue-700' : 'bg-yellow-500 hover:bg-yellow-700'} text-white`}
-                         >
-                           <div className="flex justify-center">
-                             {isInCart ? "View" : "Add"} <ShoppingCartIcon className="ml-2 h-6" />
-                           </div>
-                         </button>
-                       </div>
-                     </div>
-                   </div>
-                 </div>
-               </div>
-              }
-      
-             { loading && (<div>
-  
-                  <div className="bg-slate-100 min-h-[590px]">
-                  <div className="min-w-[1000px] max-w-[1500px] h-[450px] p-4">
-                      <div className="grid grid-cols-10 gap-2 border-2">
-                          {/* Left */}
-                        
-                              <Skeleton className="col-span-2 w-[250px] p-4 rounded  m-auto h-[400px]"/>
-                          
-                        
-                               <Skeleton className="col-span-6 p-4 h-[400px] rounded  divide-y "/>
-                        
-                          {/* Right */}
-                       
-                              <Skeleton className="col-span-2 p-4 h-[400px] rounded"/>
-                          
-      
-                          </div>
-                      </div>
-                  </div>
-              </div>
-             )}
-          </div>
-        </div>
-    )
 }
+interface Product {
+  product_name: string;
+  product_description: string;
+  price: number;
+  image: string;
+  id: string;
+  category: string;
+  stock: number;
+  quantity?: number;
+}
+
+export const ProductFinalCard = () => {
+  const params = useParams();
+  const dispatch = useDispatch();
+  const cartData = useSelector((state: InitialState) => state.cart);
+  const userData = useSelector((state: InitialState) => state.userData);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isInCart, setIsInCart] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        const response = await axios.post(`/api/user/product/getProduct/[productId]`, {
+          productId: params.productId
+        });
+        setProduct(response.data);
+        setLoading(false);
+      } catch (e) {
+        console.error("Error fetching product data:", e);
+        setProduct(null);
+        setLoading(false);
+        toast.error("Error While Fetching Product");
+      }
+    };
+    fetchProductData();
+  }, [params.productId]);
+
+  useEffect(() => {
+    const checkIfProductInCart = () => {
+      if (cartData && product) {
+        const productInCart = cartData.products.some((item: CartProduct) => item.id === product.id);
+        setIsInCart(productInCart);
+      }
+    };
+    checkIfProductInCart();
+  }, [cartData, product]);
+
+  const handleAddToCart = async () => {
+    if (!userData.id) {
+      router.push(`/signin`);
+      toast.error("You have to login first");
+      return;
+    }
+
+    if (!product || !product.id) {
+      toast.error("Product information is missing");
+      return;
+    }
+
+    try {
+      const productWithQuantity: CartProduct = { ...product, quantity: 1, id: product.id };
+      if (cartData.id !== "") {
+        await updateCartInDatabase(cartData, productWithQuantity);
+      } else {
+        await createCartInDatabase(userData.id, productWithQuantity);
+      }
+      router.push("/checkout");
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+  };
+
+  const createCartInDatabase = async (userId: string, product: CartProduct) => {
+    const { data } = await axios.post("/api/user/cart/create", {
+      products: [product],
+      userId: userId,
+    });
+    dispatch(setCartData({
+      products: [product],
+      id: data.id,
+    }));
+  };
+
+  const updateCartInDatabase = async (currentCart: Cart, newProduct: CartProduct) => {
+    const updatedCartData = {
+      id: currentCart.id,
+      products: [...currentCart.products, newProduct]
+    };
+    await axios.post(`/api/user/cart/update/${currentCart.id}`, updatedCartData);
+    dispatch(setCartData(updatedCartData));
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <Card className="overflow-hidden">
+          <CardContent className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <Skeleton className="w-full aspect-square rounded-lg" />
+              <div className="space-y-4">
+                <Skeleton className="h-8 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-10 w-1/3" />
+                <div className="flex space-x-4">
+                  <Skeleton className="h-12 w-32" />
+                  <Skeleton className="h-12 w-32" />
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <h2 className="text-2xl font-bold mb-4">Product Not Found</h2>
+        <p className="mb-4">Sorry, we couldn`&apos;`t find the product you`&apos;`re looking for.</p>
+        <Button onClick={() => router.push('/')} className="inline-flex items-center">
+          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="container mx-auto px-4 py-8"
+    >
+      <Card className="overflow-hidden">
+        <CardContent className="p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <div className="relative group max-w-md mx-auto md:max-w-lg lg:max-w-xl overflow-hidden rounded-lg">
+              <Image
+                src={product.image}
+                alt={product.product_name}
+                width={500}
+                height={500}
+                className="w-full h-auto max-h-96 rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105 object-cover"
+              />
+            </div>
+            <div className="space-y-6 lg:sticky lg:top-8">
+              <div>
+                <h1 className="text-3xl font-bold mb-2">{product.product_name}</h1>
+                <Badge variant="secondary">{product.category}</Badge>
+              </div>
+              <p className="text-gray-600">{product.product_description}</p>
+              <div className="flex items-baseline space-x-2">
+                <span className="text-3xl font-bold text-primary">₹{product.price.toLocaleString()}</span>
+                <span className="text-sm text-gray-500 line-through">₹{(product.price * 1.2).toFixed(2)}</span>
+                <span className="text-sm font-semibold text-green-600">20% off</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                
+                {product.stock > 0 && (
+                  <span className="text-sm text-gray-600">
+                    {product.stock} {product.stock === 1 ? 'item' : 'items'} left
+                  </span>
+                )}
+              </div>
+              <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto"
+                  onClick={() => {
+                    if (userData.id) {
+                      router.push(`/payment/${product.id}?quantity=1`);
+                    } else {
+                      router.push(`/signin`);
+                      toast.error("Login Reccuvire")
+                    }
+                  }}
+                >
+                  Buy Now
+                </Button>
+                <Button
+                  size="lg"
+                  variant={isInCart ? "secondary" : "outline"}
+                  className="w-full sm:w-auto"
+                  onClick={isInCart ? () => router.push(`/checkout`) : handleAddToCart}
+                >
+                  <ShoppingCart className="mr-2 h-5 w-5" />
+                  {isInCart ? "View Cart" : "Add to Cart"}
+                </Button>
+              </div>
+              <div className="space-y-2 text-sm text-gray-600">
+                <p>✓ Free Returns</p>
+                <p>✓ Free Delivery</p>
+                <p>✓ 2 Year Warranty</p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
+
 export default ProductFinalCard;
