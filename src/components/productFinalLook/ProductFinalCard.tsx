@@ -176,7 +176,7 @@ export const ProductFinalCard = () => {
             <div className="space-y-6 lg:sticky lg:top-8">
               <div>
                 <h1 className="text-3xl font-bold mb-2">{product.product_name}</h1>
-                <Badge variant="secondary">{product.category}</Badge>
+                {/* <Badge variant="secondary">{product.category}</Badge> */}
               </div>
               <p className="text-gray-600">{product.product_description}</p>
               <div className="flex items-baseline space-x-2">
